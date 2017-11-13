@@ -16,8 +16,9 @@ contract MonteLabs {
   event AttachedEvidence(bytes32 ipfsHash);
 
   struct Audit {
-    address addr;
-    uint level;
+    address addr;       // (optional) address of deployed contract
+    uint level;         // Audit level
+    uint insertedBlock; // Audit's block
   }
 
   // MonteLabs owners
@@ -41,7 +42,11 @@ contract MonteLabs {
   }
   
   // Add audit information
-  function addAudit(address) onlyOwners {
+  function addAudit(bytes32 code, address _addr, uint _level) onlyOwners {
+    auditedContracts[code] = Audit({addr: _addr, 
+        level: _level,
+        insertedBlock: block.number
+    });
   }
   // Add address to audited code
   function addAddressInAudit(bytes32 codeHash, address addr)

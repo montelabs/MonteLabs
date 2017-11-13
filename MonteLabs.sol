@@ -20,8 +20,12 @@ contract MonteLabs {
       owners[_owners[i]] = true;  
   }
   
-  function isAddressVerified(address addr) constant returns(uint) {
+  function isVerified(address addr) constant returns(uint) {
     var codeHash = keccak256(GetCode(addr));
+    return auditedContracts[codeHash].auditLevel;
+  }
+
+  function isVerified(bytes32 codeHash) constant returns(uint) {
     return auditedContracts[codeHash].auditLevel;
   }
   

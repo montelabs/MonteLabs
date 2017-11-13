@@ -7,8 +7,8 @@ contract MonteLabs {
     _;
   }
 
-  modifier emptyAddress(Audit audit) {
-    require(audit.addr == 0x0);
+  modifier auditExists(bytes32 codeHash) {
+    require(auditedContracts[codeHash].level > 0);
     _;
   }
 
@@ -16,7 +16,6 @@ contract MonteLabs {
   event AttachedEvidence(bytes32 indexed codeHash, bytes32 ipfsHash);
 
   struct Audit {
-    address addr;       // (optional) address of deployed contract
     uint level;         // Audit level
     uint insertedBlock; // Audit's block
   }
@@ -43,23 +42,17 @@ contract MonteLabs {
   }
   
   // Add audit information
-  function addAudit(bytes32 code, address _addr, uint _level) onlyOwners {
-    auditedContracts[code] = Audit({addr: _addr, 
+  function addAudit(bytes32 code, uint _level) onlyOwners {
+    auditedContracts[code] = Audit({ 
         level: _level,
         insertedBlock: block.number
     });
   }
   
-  // Add address to audited code
-  function addAddressInAudit(bytes32 codeHash, address addr)
-    onlyOwners 
-    emptyAddress(auditedContracts[codeHash]) {
-    auditedContracts[codeHash].addr = addr;
-  }
-  
   // Add evidence to audited code 
   function addEvidence(bytes32 codeHash, bytes32 ipfsHash) 
-    onlyOwners {
+    onlyOwners 
+    auditExists(codeHash) {
     AttachedEvidence(codeHash, ipfsHash);
   }
 }

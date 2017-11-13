@@ -32,21 +32,22 @@ contract MonteLabs {
   }
   
   // Returns code audit level, 0 if not present
-  function isVerified(address addr) constant returns(uint) {
+  function isVerifiedAddress(address addr) constant returns(uint) {
     var codeHash = keccak256(GetCode(addr));
     return auditedContracts[codeHash].level;
   }
 
-  function isVerified(bytes32 codeHash) constant returns(uint) {
+  function isVerifiedCode(bytes32 codeHash) constant returns(uint) {
     return auditedContracts[codeHash].level;
   }
   
   // Add audit information
-  function addAudit(bytes32 code, uint _level) onlyOwners {
-    auditedContracts[code] = Audit({ 
+  function addAudit(bytes32 codeHash, uint _level, bytes32 ipfsHash) onlyOwners {
+    auditedContracts[codeHash] = Audit({ 
         level: _level,
         insertedBlock: block.number
     });
+    AttachedEvidence(codeHash, ipfsHash);
   }
   
   // Add evidence to audited code 

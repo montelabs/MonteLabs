@@ -1,5 +1,6 @@
 pragma solidity ^0.4.0;
 
+// From: http://solidity.readthedocs.io/en/develop/assembly.html#example
 library GetCode {
   function at(address _addr) returns (bytes o_code) {
     assembly {

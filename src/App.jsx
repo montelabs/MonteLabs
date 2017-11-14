@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import SimpleStorageContract from '../build/contracts/MonteLabs.json';
+import { withStyles } from 'material-ui/styles';
 import getWeb3 from './utils/getWeb3';
 
 import AppBar from 'material-ui/AppBar';
@@ -8,22 +8,29 @@ import Typography from 'material-ui/Typography';
 
 import AuditedContracs from './AuditedContracts';
 
+const styles = theme => ({
+  flex: {
+    flex: 'auto',
+  }
+});
+
 class App extends Component {
+  
   constructor(props) {
     super(props)
-
     this.state = {
       storageValue: 0,
-      web3: null
+      web3js: null,
+      provider: 'unknown'
     }
   }
 
   componentWillMount() {
     getWeb3
     .then(results => {
-      this.setState({
-        web3: results.web3
-      })
+      this.setState(
+        results
+      )
       this.instantiateContract();
     })
     .catch(() => {
@@ -32,8 +39,6 @@ class App extends Component {
   }
 
   instantiateContract() {
-
-    const contract = require('truffle-contract');
     // const simpleStorage = contract(SimpleStorageContract);
     // simpleStorage.setProvider(this.state.web3.currentProvider);
 
@@ -58,12 +63,17 @@ class App extends Component {
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div>
-        <AppBar position="static" color="default">
+        <AppBar position='static' color='default'>
           <Toolbar>
-            <Typography type="title" color="inherit">
+            <Typography type='title' color='inherit' className={classes.flex}>
               Audited codes
+            </Typography>
+            <Typography type='title' color='inherit'>
+              Web3 Provider: {this.state.provider}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -73,4 +83,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default withStyles(styles)(App)

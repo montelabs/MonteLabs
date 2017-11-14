@@ -55,7 +55,8 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "solc": "^0.4.18",
-    "typeface-roboto": "0.0.45"
+    "typeface-roboto": "0.0.45",
+    "web3": "^1.0.0-beta.26"
   },
   "scripts": {
     "start": "node scripts/start.js",

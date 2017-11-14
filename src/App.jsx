@@ -28,6 +28,7 @@ class App extends Component {
   componentWillMount() {
     getWeb3
     .then(results => {
+      console.log(results)
       this.setState(
         results
       )
@@ -69,11 +70,14 @@ class App extends Component {
       <div>
         <AppBar position='static' color='default'>
           <Toolbar>
-            <Typography type='title' color='inherit' className={classes.flex}>
+            <Typography type='headline' color='inherit' className={classes.flex}>
               Audited codes
             </Typography>
-            <Typography type='title' color='inherit'>
+            <Typography type='subheading' color='inherit' className={classes.flex}>
               Web3 Provider: {this.state.provider}
+            </Typography>
+            <Typography type='subheading' color='inherit'>
+              Network: {this.state.networkName}
             </Typography>
           </Toolbar>
         </AppBar>

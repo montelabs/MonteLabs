@@ -1,0 +1,49 @@
+The MonteLabs smart contract is a simple contract that stores
+information about code that has been audited by MonteLabs.
+
+### Internal types
+
+The type `struct Audit` stores the depth of the audit in `level`
+and the block where the audit was inserted in this smart contract
+in `insertedBlock`.
+
+### Storage members
+
+This contract uses two `mappings`. The first, `owners`, stores
+the owners of this contract, the ones able to insert audits.
+Mapping `auditedContracts` stores the audits that have been inserted,
+using the hash of the code as key.
+
+### Modifiers
+
+Modifier `onlyOwners` requires the `msg.sender` to be an owner, and
+modifier `auditExists` requires the given code to have at least level
+1 of audit.
+
+### Constructor
+
+The constructor takes as a parameter the list of owners, which
+cannot be greater than 5 owners, and sets each of them as owner
+of the contract.
+This is the only way to provide owners to the smart contract.
+If the contract is deployed without owners or with the wrong ones,
+it should not be used.
+
+### Functions
+
+There are two functions that can be used by anyone, with the same goal:
+verify the audit level of a certain code. Function `isVerifiedAddress`
+takes the address of a deployed contract, computes its hash and checks
+its audit level. If the given address is invalid, level 0 is returned.
+Function `isVerifiedCode` does the same check directly for the given
+code, and returns 0 in case the code hasn't been audited. Both functions
+are constant.
+Function `addAudit` can only be used by the owners and inserts a new audit
+in the contract. It also requires a security evidence given as an IPFS hash.
+Function `addEvidence` can also only be used by owners, and adds more security
+evidence to a previously audited code.
+
+### Events
+
+The event `AttachedEvidence` logs the security evidences from IPFS that are
+related to audited code.

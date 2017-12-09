@@ -2,35 +2,19 @@ pragma solidity ^0.4.15;
 import "utils.sol";
 
 contract MonteLabs {
-  modifier onlyOwners() {
-    require(owners[msg.sender] == true);
-    _;
-  }
-
   modifier auditExists(bytes32 codeHash) {
     require(auditedContracts[codeHash].level > 0);
     _;
   }
 
   // Attach 0x1220 to beggining of ipfsHash
-  event AttachedEvidence(bytes32 indexed codeHash, bytes32 ipfsHash);
-  event NewAudit(bytes32 codeHash, bytes32 ipfsHash);
+  event AttachedEvidence(bytes32 indexed codeHash, bytes32 ipfsHash, address indexed auditedBy);
+  event NewAudit(bytes32 codeHash, bytes32 ipfsHash, address indexed auditedBy);
 
-  struct Audit {
-    uint level;         // Audit level
-    uint insertedBlock; // Audit's block
-  }
-
-  // MonteLabs owners
-  mapping (address => bool) public owners;
   // Maps code's keccak256 hash to Audit
-  mapping (bytes32 => Audit) public auditedContracts;
+  mapping (bytes32 => DS.Audit) public auditedContracts;
 
-  function MonteLabs(address[] _owners) {
-    require(_owners.length <= 5);
-    for (uint i = 0; i < _owners.length; ++i) {
-      owners[_owners[i]] = true;
-    }
+  function MonteLabs() {
   }
   
   // Returns code audit level, 0 if not present
@@ -44,19 +28,19 @@ contract MonteLabs {
   }
   
   // Add audit information
-  function addAudit(bytes32 codeHash, uint _level, bytes32 ipfsHash) onlyOwners {
-    auditedContracts[codeHash] = Audit({ 
+  function addAudit(bytes32 codeHash, uint _level, bytes32 ipfsHash) {
+    auditedContracts[codeHash] = DS.Audit({ 
         level: _level,
+        auditedBy: msg.sender,
         insertedBlock: block.number
     });
-    NewAudit(codeHash, ipfsHash);
+    NewAudit(codeHash, ipfsHash, msg.sender);
   }
   
   // Add evidence to audited code 
   function addEvidence(bytes32 codeHash, bytes32 ipfsHash) 
-    onlyOwners 
     auditExists(codeHash) {
-    AttachedEvidence(codeHash, ipfsHash);
+    AttachedEvidence(codeHash, ipfsHash, msg.sender);
   }
 }
 

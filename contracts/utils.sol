@@ -18,3 +18,17 @@ library GetCode {
     }
   }
 }
+
+library DS {
+  struct Audit {
+    uint level;         // Audit level
+    address auditedBy;  // Audited by address
+    uint insertedBlock; // Audit's block
+  }
+  struct PendingAudit {
+    uint level;
+    bytes32 codeHash;
+    bytes32 ipfsHash;
+    address author;
+  }
+}

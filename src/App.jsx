@@ -67,11 +67,11 @@ class App extends Component {
     const { classes } = this.props;
 
     return (
-      <div>
-        <AppBar position='static' color='default'>
+      <div style={{marginLeft: 200, marginRight: 200}}>
+        <AppBar position="static" color="default">
           <Toolbar>
             <Typography type='headline' color='inherit' className={classes.flex}>
-              Audited codes
+              Security Audits
             </Typography>
             <Typography type='subheading' color='inherit' className={classes.flex}>
               Web3 Provider: {this.state.provider}

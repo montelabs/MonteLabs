@@ -1,8 +1,10 @@
 [
   { "name": "MonteLabs",
-    "short_description": "MonteLabs' own contracts for auditing and verification"
+    "short_description": "MonteLabs' own contracts for auditing and verification.",
+    "report_ipfs": ""
   },
-  { "name": "ICO",
-    "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et commodo nibh."
+  { "name": "TEND ICO",
+    "short_description": "The TEND ICO smart contracts, based on OpenZepellin.",
+    "report_ipfs": "QmS4DCRi73aXJWyTECuN4s9yDaR2yMrVvyTa8s3eR9ZVS7"
   }
 ]

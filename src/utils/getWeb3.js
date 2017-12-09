@@ -20,7 +20,7 @@ let getWeb3 = new Promise((resolve, reject) => {
       }
     } 
     else {
-      let pr = new Web3.providers.HttpProvider('https://kovan.infura.io/')
+      let pr = new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws')
       provider = 'Infura'
       web3js = new Web3(pr);
 

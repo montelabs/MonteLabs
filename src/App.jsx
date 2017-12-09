@@ -8,6 +8,8 @@ import Typography from 'material-ui/Typography';
 
 import AuditedContracs from './AuditedContracts';
 
+const json = [{"constant":true,"inputs":[],"name":"text","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_a","type":"string"}],"name":"change","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_a","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+
 const styles = theme => ({
   flex: {
     flex: 'auto',
@@ -44,7 +46,7 @@ class App extends Component {
     // simpleStorage.setProvider(this.state.web3.currentProvider);
 
     // Declaring this for later so we can chain functions on SimpleStorage.
-    var simpleStorageInstance;
+    window.simpleStorageInstance = new this.state.web3js.eth.Contract(json, "0x125532593101680A90f3515b9B329F77071387FD");
 
     // Get accounts.
     // this.state.web3.eth.getAccounts((error, accounts) => {

@@ -23,7 +23,8 @@ class App extends Component {
     this.state = {
       storageValue: 0,
       web3js: null,
-      provider: 'unknown'
+      provider: 'unknown',
+      errorMsg: null
     }
   }
 
@@ -43,15 +44,16 @@ class App extends Component {
 
   instantiateContract() {
     const web3js = this.state.web3js;
-    // const simpleStorage = contract(SimpleStorageContract);
-    // simpleStorage.setProvider(this.state.web3.currentProvider);
 
-    // Declaring this for later so we can chain functions on SimpleStorage.
+    if (!(this.state.networkId in MonteLabsContractJson.deployed)) {
+      this.setState({errorMsg: 'Contract not deployed in this network'});
+      return;
+    }
     const ABI = MonteLabsContractJson.abi;
     const address = MonteLabsContractJson.deployed[this.state.networkId];
     try {
       const contract = new web3js.eth.Contract(ABI, address);
-      this.setState({monteLabsContract: contract});
+      this.setState({monteLabsContract: contract, errorMsg: null});
     }
     catch(error) {
       console.log('ERROR', error)
@@ -74,12 +76,23 @@ class App extends Component {
     // })
   }
 
+  ErrorBar = () => {
+    if (this.state.errorMsg == null) return null;
+    return (
+    <AppBar position='static' color='inherit'>
+      <Typography type='headline' color='error'>
+        Error: {this.state.errorMsg}
+      </Typography>
+    </AppBar>
+    )
+  }
+
   render() {
     const { classes } = this.props;
 
     return (
       <div style={{marginLeft: 200, marginRight: 200}}>
-        <AppBar position="static" color="default">
+        <AppBar position='static' color='default'>
           <Toolbar>
             <Typography type='headline' color='inherit' className={classes.flex}>
               Security Audits
@@ -92,6 +105,7 @@ class App extends Component {
             </Typography>
           </Toolbar>
         </AppBar>
+        <this.ErrorBar />
         <AuditedContracs />
       </div>
     );

@@ -8,7 +8,7 @@ import Typography from 'material-ui/Typography';
 
 import AuditedContracs from './AuditedContracts';
 
-const json = [{"constant":true,"inputs":[],"name":"text","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_a","type":"string"}],"name":"change","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_a","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+import MonteLabsContractJson from '../compiledContracts/MonteLabs.json';
 
 const styles = theme => ({
   flex: {
@@ -42,11 +42,20 @@ class App extends Component {
   }
 
   instantiateContract() {
+    const web3js = this.state.web3js;
     // const simpleStorage = contract(SimpleStorageContract);
     // simpleStorage.setProvider(this.state.web3.currentProvider);
 
     // Declaring this for later so we can chain functions on SimpleStorage.
-    window.simpleStorageInstance = new this.state.web3js.eth.Contract(json, "0x125532593101680A90f3515b9B329F77071387FD");
+    const ABI = MonteLabsContractJson.abi;
+    const address = MonteLabsContractJson.deployed[this.state.networkId];
+    try {
+      const contract = new web3js.eth.Contract(ABI, address);
+      this.setState({monteLabsContract: contract});
+    }
+    catch(error) {
+      console.log('ERROR', error)
+    }
 
     // Get accounts.
     // this.state.web3.eth.getAccounts((error, accounts) => {

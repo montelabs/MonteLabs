@@ -24,10 +24,10 @@ if __name__ == '__main__':
   open(monteLabsContractPath + '.bin') as monteLabsContractBin, \
   open(monteLabsContractPath + '.abi') as monteLabsContractABI:
     writeJSON(monteLabsContractBin.readlines()[0], \
-      monteLabsContractABI.readlines()[0], '../compiledContracts/MonteLabs.json')
+      json.loads(monteLabsContractABI.readlines()[0]), '../compiledContracts/MonteLabs.json')
   
   with \
   open(monteLabsMSPath + '.bin') as monteLabsMSContractBin, \
   open(monteLabsMSPath + '.abi') as monteLabsMSContractABI:
     writeJSON(monteLabsMSContractBin.readlines()[0], \
-      monteLabsMSContractABI.readlines()[0], '../compiledContracts/MonteLabsMS.json')
+     json.loads(monteLabsMSContractABI.readlines()[0]), '../compiledContracts/MonteLabsMS.json')

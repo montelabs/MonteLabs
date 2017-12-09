@@ -1,5 +1,76 @@
 {
   "bin": "6060604052341561000f57600080fd5b60405161057c38038061057c833981016040528080518201919050505b60006002825114151561003e57600080fd5b600090505b81518110156100c6576001600080848481518110151561005f57fe5b9060200190602002015173ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055505b806001019050610043565b5b50505b6104a3806100d96000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063022914a71461005f578063cf1d7fad146100b0578063d911447614610105578063f145da5f14610142575b600080fd5b341561006a57600080fd5b610096600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610157565b604051808215151515815260200191505060405180910390f35b34156100bb57600080fd5b6100c3610177565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561011057600080fd5b6101406004808035600019169060200190919080359060200190919080356000191690602001909190505061017c565b005b341561014d57600080fd5b6101556102ab565b005b60006020528060005260406000206000915054906101000a900460ff1681565b600081565b600115156000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff1615151415156101da57600080fd5b60006001600001541415156101ee57600080fd5b60806040519081016040528083815260200184600019168152602001826000191681526020013373ffffffffffffffffffffffffffffffffffffffff16815250600160008201518160000155602082015181600101906000191690556040820151816002019060001916905560608201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055509050505b5b505050565b600115156000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16151514151561030957600080fd5b60006001600001541415151561031e57600080fd5b600160030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415151561037e57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff1663d911447660018001546001600001546001600201546040518463ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180846000191660001916815260200183815260200182600019166000191681526020019350505050600060405180830381600087803b151561041b57600080fd5b6102c65a03f1151561042c57600080fd5b5050506001600080820160009055600182016000905560028201600090556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905550505b5b5600a165627a7a72305820cea8608e226a61c48b750f50c283515c823637011152aef4e3e1d2f97e8292660029", 
-  "abi": "[{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"owners\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"MSContract\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_codeHash\",\"type\":\"bytes32\"},{\"name\":\"_level\",\"type\":\"uint256\"},{\"name\":\"_ipfsHash\",\"type\":\"bytes32\"}],\"name\":\"addAudit\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"approveAudit\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_owners\",\"type\":\"address[]\"}],\"payable\":false,\"type\":\"constructor\"}]", 
+  "abi": [
+    {
+      "inputs": [
+        {
+          "type": "address", 
+          "name": ""
+        }
+      ], 
+      "constant": true, 
+      "name": "owners", 
+      "outputs": [
+        {
+          "type": "bool", 
+          "name": ""
+        }
+      ], 
+      "payable": false, 
+      "type": "function"
+    }, 
+    {
+      "inputs": [], 
+      "constant": true, 
+      "name": "MSContract", 
+      "outputs": [
+        {
+          "type": "address", 
+          "name": ""
+        }
+      ], 
+      "payable": false, 
+      "type": "function"
+    }, 
+    {
+      "inputs": [
+        {
+          "type": "bytes32", 
+          "name": "_codeHash"
+        }, 
+        {
+          "type": "uint256", 
+          "name": "_level"
+        }, 
+        {
+          "type": "bytes32", 
+          "name": "_ipfsHash"
+        }
+      ], 
+      "constant": false, 
+      "name": "addAudit", 
+      "outputs": [], 
+      "payable": false, 
+      "type": "function"
+    }, 
+    {
+      "inputs": [], 
+      "constant": false, 
+      "name": "approveAudit", 
+      "outputs": [], 
+      "payable": false, 
+      "type": "function"
+    }, 
+    {
+      "inputs": [
+        {
+          "type": "address[]", 
+          "name": "_owners"
+        }
+      ], 
+      "type": "constructor", 
+      "payable": false
+    }
+  ], 
   "deployed": {}
 }

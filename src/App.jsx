@@ -13,7 +13,11 @@ import MonteLabsContractJson from '../compiledContracts/MonteLabs.json';
 const styles = theme => ({
   flex: {
     flex: 'auto',
-  }
+  },
+  wrapper: {
+    marginLeft: 200,
+    marginRight: 200
+  },
 });
 
 class App extends Component {
@@ -80,7 +84,7 @@ class App extends Component {
     if (this.state.errorMsg == null) return null;
     return (
     <AppBar position='static' color='inherit'>
-      <Typography type='headline' color='error'>
+      <Typography variant='headline' color='error'>
         Error: {this.state.errorMsg}
       </Typography>
     </AppBar>
@@ -91,16 +95,16 @@ class App extends Component {
     const { classes } = this.props;
 
     return (
-      <div style={{marginLeft: 200, marginRight: 200}}>
+      <div className={classes.wrapper}>
         <AppBar position='static' color='default'>
           <Toolbar>
-            <Typography type='headline' color='inherit' className={classes.flex}>
+            <Typography variant='headline' color='inherit' className={classes.flex}>
               Security Audits
             </Typography>
-            <Typography type='subheading' color='inherit' className={classes.flex}>
+            <Typography variant='subheading' color='inherit' className={classes.flex}>
               Web3 Provider: {this.state.provider}
             </Typography>
-            <Typography type='subheading' color='inherit'>
+            <Typography variant='subheading' color='inherit'>
               Network: {this.state.networkName}
             </Typography>
           </Toolbar>

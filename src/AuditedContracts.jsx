@@ -19,9 +19,6 @@ const styles = theme => ({
     marginRight: 12,
     marginTop: 12,
   },
-  control: {
-    padding: theme.spacing.unit * 2,
-  },
 });
 
 class AuditedContracs extends React.Component {

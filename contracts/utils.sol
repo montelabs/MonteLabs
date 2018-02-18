@@ -2,7 +2,7 @@ pragma solidity ^0.4.0;
 
 // From: http://solidity.readthedocs.io/en/develop/assembly.html#example
 library GetCode {
-  function at(address _addr) returns (bytes o_code) {
+  function at(address _addr) public view returns (bytes o_code) {
     assembly {
       // retrieve the size of the code, this needs assembly
       let size := extcodesize(_addr)

@@ -14,8 +14,8 @@ const styles = theme => ({
     flexGrow: 1,
   },
   card: {
-    width: 200,
-    height: 200,
+    width: 250,
+    minHeight: 200,
     marginRight: 12,
     marginTop: 12,
   },
@@ -41,7 +41,7 @@ class AuditedContracs extends React.Component {
               <Grid key={value.name} item>
                 <Card className={classes.card}>
                 <CardContent>
-                  <Typography type="headline" component="h2">
+                  <Typography variant="headline" component="h2">
                     {value.name}
                   </Typography>
                   <Typography component="p">
@@ -49,7 +49,7 @@ class AuditedContracs extends React.Component {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button href={"https://ipfs.io/ipfs/" + value.report_ipfs} dense color='primary'>Security report</Button>
+                  <Button href={"https://ipfs.io/ipfs/" + value.report_ipfs} size="small" color='primary'>Security report</Button>
                 </CardActions>
                 </Card>
               </Grid>

@@ -36,7 +36,6 @@ const AuditedContract = ({
       </Typography>
     </CardContent>
     <CardActions>
-      {/*<Button href={"https://ipfs.io/ipfs/" + ipfs_report_addr} size="small" color='primary'>Security report</Button>*/}
       <Button 
         size="small"
         color='primary'

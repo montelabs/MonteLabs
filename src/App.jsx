@@ -7,8 +7,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
 import AuditedContracts from './AuditedContracts';
-
-import MonteLabsContractJson from '../compiledContracts/MonteLabs.json';
+import AuditJson from '../build/contracts/Audit.json';
 
 const styles = theme => ({
   flex: {
@@ -49,12 +48,12 @@ class App extends Component {
   instantiateContract() {
     const web3js = this.state.web3js;
 
-    if (!(this.state.networkId in MonteLabsContractJson.deployed)) {
+    if (!(this.state.networkId in AuditJson.deployed)) {
       this.setState({errorMsg: 'Contract not deployed in this network'});
       return;
     }
-    const ABI = MonteLabsContractJson.abi;
-    const address = MonteLabsContractJson.deployed[this.state.networkId];
+    const ABI = AuditJson.abi;
+    const address = AuditJson.deployed[this.state.networkId];
     try {
       const contract = new web3js.eth.Contract(ABI, address);
       this.setState({monteLabsContract: contract, errorMsg: null});

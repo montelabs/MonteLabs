@@ -8,8 +8,6 @@ contract MonteLabsMS {
   uint8 constant quorum = 2;
   MonteLabs public MSContract;
 
-  DS.PendingAudit pendingAudit;
-
   function MonteLabsMS(address[] _owners, MonteLabs _MSContract) public {
     MSContract = _MSContract;
     require(_owners.length == 3);

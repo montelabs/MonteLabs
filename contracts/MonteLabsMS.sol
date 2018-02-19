@@ -24,7 +24,7 @@ contract MonteLabsMS {
   }
 
   function addAudit(bytes32 _codeHash, uint _level, bytes32 _ipfsHash,
-                    uint8[] _v, bytes32[] _r, bytes32[] _s) {
+                    uint8[] _v, bytes32[] _r, bytes32[] _s) public {
     require(_v.length == quorum);
     bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
                            keccak256(_codeHash, _level, _ipfsHash));
@@ -36,12 +36,12 @@ contract MonteLabsMS {
     }
     // At least 2 different owners
     assert(voted[0] != voted[1]);
-    
+
     MSContract.addAudit(_codeHash, _level, _ipfsHash);
   }
 
-  function addEvidence(bytes32 _codeHash, uint _level, bytes32 _ipfsHash,
-                    uint8[] _v, bytes32[] _r, bytes32[] _s) {
+  function addEvidence(bytes32 _codeHash, uint version, uint _level, bytes32 _ipfsHash,
+                    uint8[] _v, bytes32[] _r, bytes32[] _s) public {
     require(_v.length == quorum);
     bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
                            keccak256(_codeHash, _level, _ipfsHash));
@@ -52,7 +52,7 @@ contract MonteLabsMS {
       voted[i] = sudoer;
     }
     assert(voted[0] != voted[1]);
-    MSContract.addEvidence(_codeHash, _ipfsHash);
+    MSContract.addEvidence(_codeHash, version, _ipfsHash);
   }
 
 }

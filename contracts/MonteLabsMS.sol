@@ -3,11 +3,6 @@ import "./MonteLabs.sol";
 import "./utils.sol";
 
 contract MonteLabsMS {
-  modifier onlyOwners() {
-    require(owners[msg.sender] == true);
-    _;
-  }
-
   // MonteLabs owners
   mapping (address => bool) public owners;
   uint8 constant quorum = 2;
@@ -24,7 +19,7 @@ contract MonteLabsMS {
   }
 
   function addAudit(bytes32 _codeHash, uint _level, bytes32 _ipfsHash,
-                    uint8[] _v, bytes32[] _r, bytes32[] _s) public {
+                    uint8[] _v, bytes32[] _r, bytes32[] _s) public  {
     require(_v.length == quorum);
     bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
                            keccak256(_codeHash, _level, _ipfsHash));

@@ -48,14 +48,19 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "argparse": "^1.0.10",
+    "bignumber.js": "^6.0.0",
+    "colors": "^1.1.2",
     "dotenv": "^2.0.0",
     "material-ui": "^1.0.0-beta.34",
     "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "solc": "^0.4.20",
+    "solidity-sha3": "^0.4.1",
     "typeface-roboto": "0.0.45",
-    "web3": "^1.0.0-beta.30"
+    "web3": "^0.19.1",
+    "web3-utils": "^1.0.0-beta.30"
   },
   "scripts": {
     "start": "node scripts/start.js",

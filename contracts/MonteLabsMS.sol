@@ -1,15 +1,15 @@
 pragma solidity ^0.4.15;
-import "./MonteLabs.sol";
+import "./Audit.sol";
 import "./utils.sol";
 
 contract MonteLabsMS {
   // MonteLabs owners
   mapping (address => bool) public owners;
   uint8 constant quorum = 2;
-  MonteLabs public MSContract;
+  Audit public auditContract;
 
-  function MonteLabsMS(address[] _owners, MonteLabs _MSContract) public {
-    MSContract = _MSContract;
+  function MonteLabsMS(address[] _owners, Audit _auditContract) public {
+    auditContract = _auditContract;
     require(_owners.length == 3);
     for (uint i = 0; i < _owners.length; ++i) {
       owners[_owners[i]] = true;
@@ -21,7 +21,7 @@ contract MonteLabsMS {
                               bytes32[] _s) internal {
     require(_v.length == quorum);
     bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
-                           keccak256(_codeHash, _level_or_version, _ipfsHash));
+                           keccak256(audit, _codeHash, _level_or_version, _ipfsHash));
     address[quorum] memory voted;
     for (uint8 i = 0; i < _v.length; ++i) {
       var sudoer = ecrecover(prefixedHash, _v[i], _r[i], _s[i]);
@@ -31,9 +31,9 @@ contract MonteLabsMS {
     // At least 2 different owners
     assert(voted[0] != voted[1]);
     if (audit)
-      MSContract.addAudit(_codeHash, _level_or_version, _ipfsHash);
+      auditContract.addAudit(_codeHash, _level_or_version, _ipfsHash);
     else
-      MSContract.addEvidence(_codeHash, _level_or_version, _ipfsHash);
+      auditContract.addEvidence(_codeHash, _level_or_version, _ipfsHash);
   }
 
   function addAudit(bytes32 _codeHash, uint _level, bytes32 _ipfsHash,

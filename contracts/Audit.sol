@@ -1,7 +1,7 @@
 pragma solidity ^0.4.15;
 import "./utils.sol";
 
-contract MonteLabs {
+contract Audit {
   // Attach 0x1220 to beggining of ipfsHash
   event AttachedEvidence(bytes32 indexed codeHash, uint version, bytes32 ipfsHash, address indexed auditedBy);
   event NewAudit(bytes32 indexed codeHash, uint version, bytes32 ipfsHash, address indexed auditedBy);
@@ -10,7 +10,7 @@ contract MonteLabs {
   mapping (bytes32 => mapping(uint => DS.Audit)) public auditedContracts;
   mapping (bytes32 => uint) public AuditVersions;
   
-  function MonteLabs() public {
+  function Audit() public {
   }
   
   // Returns code audit level, 0 if not present

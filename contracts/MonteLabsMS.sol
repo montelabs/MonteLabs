@@ -47,5 +47,4 @@ contract MonteLabsMS {
     assert(voted[0] != voted[1]);
     MSContract.addEvidence(_codeHash, version, _ipfsHash);
   }
-
 }

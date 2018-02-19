@@ -2,11 +2,6 @@ pragma solidity ^0.4.15;
 import "./utils.sol";
 
 contract MonteLabs {
-  modifier auditExists(bytes32 codeHash, uint version) {
-    require(auditedContracts[codeHash][version].level > 0);
-    _;
-  }
-
   // Attach 0x1220 to beggining of ipfsHash
   event AttachedEvidence(bytes32 indexed codeHash, uint version, bytes32 ipfsHash, address indexed auditedBy);
   event NewAudit(bytes32 indexed codeHash, uint version, bytes32 ipfsHash, address indexed auditedBy);
@@ -39,9 +34,9 @@ contract MonteLabs {
     ++AuditVersions[codeHash];
   }
   
-  // Add evidence to audited code 
-  function addEvidence(bytes32 codeHash, uint version, bytes32 ipfsHash) public
-    auditExists(codeHash, version) {
+  // Add evidence to audited code, only author
+  function addEvidence(bytes32 codeHash, uint version, bytes32 ipfsHash) public {
+    require(auditedContracts[codeHash][version].auditedBy == msg.sender);
     AttachedEvidence(codeHash, version, ipfsHash, msg.sender);
   }
 }

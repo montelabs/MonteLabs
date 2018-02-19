@@ -1,65 +1,71 @@
 /* eslint-disable flowtype/require-valid-file-annotation */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
-import verifiedContracts from './utils/verifiedContracts.json'
-import Button from 'material-ui/Button';
+
+import verifiedContracts from './utils/verifiedContracts.json';
+import ipfsReports from './utils/ipfsReports.json';
+import AuditedContract from './AuditedContract';
+import Reports from './Reports';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
   },
-  card: {
-    width: 250,
-    minHeight: 200,
-    marginRight: 12,
-    marginTop: 12,
-  },
 });
 
-class AuditedContracs extends React.Component {
-  state = {
-    spacing: '8',
-  };
+class AuditedContracts extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      reports: [],
+      showReports: false,
+    };
+  }
+
+  // TODO: get from ipfs
+  getIPFSReports = (ipfs_report_addr) => {
+    this.setState({reports: ipfsReports, showReports: true});
+  }
+
+  onCloseReports = () => {
+    this.setState({showReports: false});
+  }
 
   render() {
     const { classes } = this.props;
-    const { spacing } = this.state;
+    const { reports, showReports } = this.state;
 
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
-          <Grid container className={classes.demo} justify="flex-start" spacing={Number(spacing)}>
-            {verifiedContracts.map(value => (
-              <Grid key={value.name} item>
-                <Card className={classes.card}>
-                <CardContent>
-                  <Typography variant="headline" component="h2">
-                    {value.name}
-                  </Typography>
-                  <Typography component="p">
-                    {value.short_description}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button href={"https://ipfs.io/ipfs/" + value.report_ipfs} size="small" color='primary'>Security report</Button>
-                </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+          {showReports ? (
+            <Reports reports={reports} onClose={this.onCloseReports}/>
+          ) : (
+            <Grid container className={classes.demo} justify="flex-start" spacing={8}>
+              {verifiedContracts.map(value => (
+                <Grid key={value.name} item>
+                  <AuditedContract
+                    name={value.name}
+                    short_description={value.short_description}
+                    ipfs_report_addr={value.ipfs_report_addr}
+                    getIPFSReports={this.getIPFSReports}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Grid>
       </Grid>
     );
   }
 }
 
-AuditedContracs.propTypes = {
+AuditedContracts.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AuditedContracs);
+export default withStyles(styles)(AuditedContracts);

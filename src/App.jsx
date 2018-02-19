@@ -6,7 +6,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
-import AuditedContracs from './AuditedContracts';
+import AuditedContracts from './AuditedContracts';
 
 import MonteLabsContractJson from '../compiledContracts/MonteLabs.json';
 
@@ -110,7 +110,7 @@ class App extends Component {
           </Toolbar>
         </AppBar>
         <this.ErrorBar />
-        <AuditedContracs />
+        <AuditedContracts />
       </div>
     );
   }

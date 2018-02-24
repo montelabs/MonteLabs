@@ -1,4 +1,4 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.19;
 import "./Audit.sol";
 import "./utils.sol";
 
@@ -16,33 +16,31 @@ contract MonteLabsMS {
     }
   }
 
-  function addAuditOrEvidence(bool audit, bytes32 _codeHash, uint _level_or_version,
-                              bytes32 _ipfsHash, uint8[] _v, bytes32[] _r, 
-                              bytes32[] _s) internal {
-    require(_v.length == quorum);
+  function addAuditOrEvidence(bool audit, bytes32 _codeHash, uint _levelOrVersion,
+                              bytes32 _ipfsHash, uint8 _v, bytes32 _r, 
+                              bytes32 _s) internal {
+    address sender = msg.sender;
+    require(owners[sender]);
+
     bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
-                           keccak256(audit, _codeHash, _level_or_version, _ipfsHash));
-    address[quorum] memory voted;
-    for (uint8 i = 0; i < _v.length; ++i) {
-      var sudoer = ecrecover(prefixedHash, _v[i], _r[i], _s[i]);
-      require(owners[sudoer]);
-      voted[i] = sudoer;
-    }
+                           keccak256(audit, _codeHash, _levelOrVersion, _ipfsHash));
+
+    address other = ecrecover(prefixedHash, _v, _r, _s);
     // At least 2 different owners
-    assert(voted[0] != voted[1]);
+    assert(other != sender);
     if (audit)
-      auditContract.addAudit(_codeHash, _level_or_version, _ipfsHash);
+      auditContract.addAudit(_codeHash, _levelOrVersion, _ipfsHash);
     else
-      auditContract.addEvidence(_codeHash, _level_or_version, _ipfsHash);
+      auditContract.addEvidence(_codeHash, _levelOrVersion, _ipfsHash);
   }
 
   function addAudit(bytes32 _codeHash, uint _level, bytes32 _ipfsHash,
-                    uint8[] _v, bytes32[] _r, bytes32[] _s) public  {
+                    uint8 _v, bytes32 _r, bytes32 _s) public {
     addAuditOrEvidence(true, _codeHash, _level, _ipfsHash, _v, _r, _s);
   }
 
   function addEvidence(bytes32 _codeHash, uint _version, bytes32 _ipfsHash,
-                    uint8[] _v, bytes32[] _r, bytes32[] _s) public {
+                    uint8 _v, bytes32 _r, bytes32 _s) public {
     addAuditOrEvidence(false, _codeHash, _version, _ipfsHash, _v, _r, _s);
   }
 }

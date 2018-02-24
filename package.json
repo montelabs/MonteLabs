@@ -50,8 +50,10 @@
   "dependencies": {
     "argparse": "^1.0.10",
     "bignumber.js": "^6.0.0",
+    "bs58": "^4.0.1",
     "colors": "^1.1.2",
     "dotenv": "^2.0.0",
+    "ipfs": "^0.27.7",
     "material-ui": "^1.0.0-beta.34",
     "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.2.0",

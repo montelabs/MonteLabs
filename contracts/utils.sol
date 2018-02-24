@@ -1,34 +1,28 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.19;
 
 // From: http://solidity.readthedocs.io/en/develop/assembly.html#example
 library GetCode {
-  function at(address _addr) public view returns (bytes o_code) {
+  function at(address _addr) public view returns (bytes code) {
     assembly {
       // retrieve the size of the code, this needs assembly
       let size := extcodesize(_addr)
       // allocate output byte array - this could also be done without assembly
       // by using o_code = new bytes(size)
-      o_code := mload(0x40)
+      code := mload(0x40)
       // new "memory end" including padding
-      mstore(0x40, add(o_code, and(add(add(size, 0x20), 0x1f), not(0x1f))))
+      mstore(0x40, add(code, and(add(add(size, 0x20), 0x1f), not(0x1f))))
       // store length in memory
-      mstore(o_code, size)
+      mstore(code, size)
       // actually retrieve the code, this needs assembly
-      extcodecopy(_addr, add(o_code, 0x20), 0, size)
+      extcodecopy(_addr, add(code, 0x20), 0, size)
     }
   }
 }
 
 library DS {
-  struct Audit {
+  struct Proof {
     uint level;         // Audit level
     address auditedBy;  // Audited by address
     uint insertedBlock; // Audit's block
-  }
-  struct PendingAudit {
-    uint level;
-    bytes32 codeHash;
-    bytes32 ipfsHash;
-    address author;
   }
 }

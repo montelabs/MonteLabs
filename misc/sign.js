@@ -48,14 +48,6 @@ async function main() {
     else if (args['mode'] === 'ensemble') {
       // Parse other sig
       const otherSig = JSON.parse(args['othersig']);
-      let v = [otherSig.v];
-      let r = [otherSig.r];
-      let s = [otherSig.s];
-
-      // Ensemble both signatures
-      v.push(signature.v);
-      r.push(signature.r);
-      s.push(signature.s);
 
       // Send tx
       const MLContractABI = require('../build/contracts/MonteLabsMS').abi
@@ -63,11 +55,11 @@ async function main() {
 
       if (args['type'] === 'new') {
         contract.addAudit(
-            args['hash'], args['level'], args['ipfs'], v, r, s,
+            args['hash'], args['level'], args['ipfs'], otherSig.v, otherSig.r, otherSig.s,
             {from: args['account']});
       } else if (args['type'] === 'evidence') {
         contract.addEvidence(
-            args['hash'], args['level'], args['ipfs'], v, r, s,
+            args['hash'], args['level'], args['ipfs'], otherSig.v, otherSig.r, otherSig.s,
             {from: args['account']});
       }
       console.log('Trying to sign and send tx...');

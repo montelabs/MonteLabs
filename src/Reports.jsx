@@ -5,6 +5,8 @@ import Button from 'material-ui/Button';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import Toolbar from 'material-ui/Toolbar';
 
+import IPFS from 'ipfs';
+
 const styles = theme => ({
   table: {
     width: '100%',
@@ -18,6 +20,21 @@ const styles = theme => ({
 });
 
 const Reports = (props) => {
+  let ipfsNode = new IPFS();
+  console.log(ipfsNode);
+  ipfsNode.on('ready', async () => {
+    try{
+      // var Buffer = require('buffer');
+      console.log(ipfsNode.dag.get)
+      window.ipfs = ipfsNode;
+      window.Buffer = Buffer;
+      const cosa = await ipfsNode.files.get('QmQ2r6iMNpky5f1m4cnm3Yqw8VSvjuKpTcK1X7dBR1LkJF');
+      console.log('Hey', cosa);
+    }
+    catch(err) {
+      console.log('ERROR', err);
+    }
+  });
   const { classes, reports, onClose } = props;
   return (
     <div>

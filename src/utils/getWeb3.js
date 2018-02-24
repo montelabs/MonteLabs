@@ -30,25 +30,19 @@ let getWeb3 = new Promise((resolve, reject) => {
       }
       console.log('No web3 instance injected, using infura\'s provider');
     }
-    let networkId = await web3js.eth.net.getId();
+    const networkId = web3js.version.network;
     let networkName = null;
-    switch (networkId) {
-      case 1:
+    if (networkId === '1')
         networkName = 'Main Ethereum';
-        break;
-      case 3:
+    else if (networkId === '3')
         networkName = 'Ropsten';
-        break;
-      case 4:
+    else if (networkId === '4')
         networkName = 'Rinkeby';
-        break;
-      case 42:
+    else if (networkId === '42')
         networkName = 'Kovan';
-        break;
-      default:
+     else
         networkName = 'Private';
-        break;
-    }
+  
     resolve({ ...results, networkId, networkName });
   })
 })

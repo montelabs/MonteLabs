@@ -1,4 +1,4 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.19;
 import "./utils.sol";
 
 contract Audit {
@@ -7,7 +7,7 @@ contract Audit {
   event NewAudit(bytes32 indexed codeHash, uint version, bytes32 ipfsHash, address indexed auditedBy);
 
   // Maps code's keccak256 hash to Audit
-  mapping (bytes32 => mapping(uint => DS.Audit)) public auditedContracts;
+  mapping (bytes32 => mapping(uint => DS.Proof)) public auditedContracts;
   mapping (bytes32 => uint) public AuditVersions;
   
   function Audit() public {
@@ -25,7 +25,7 @@ contract Audit {
   
   // Add audit information
   function addAudit(bytes32 codeHash, uint _level, bytes32 ipfsHash) public {
-    auditedContracts[codeHash][AuditVersions[codeHash]] = DS.Audit({ 
+    auditedContracts[codeHash][AuditVersions[codeHash]] = DS.Proof({ 
         level: _level,
         auditedBy: msg.sender,
         insertedBlock: block.number

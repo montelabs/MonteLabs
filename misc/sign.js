@@ -41,10 +41,12 @@ main();
 
 async function main() {
   try {
-    const signature = await Sig(args['account'], message);
-    if (args['mode'] === 'sign')
-      console.log(
-          ('Copy the signature: \'' + JSON.stringify(signature) + '\'').green);
+    if (args['mode'] === 'sign') {
+      const signature = await Sig(args['account'], message);
+      // console.log(
+        // ('Run: ./sign.js --othersig' + '\'' + JSON.stringify(signature) + '\'' + '--MSContract ' + args['MSContract']).green
+      console.log(`Run ./sign.js --othersig ${'\''}${JSON.stringify(signature)}${'\''} --MSContract ${args['MSContract']} --mode ensemble --type ${args['type']} --hash ${args['hash']} --level ${args['level']} --ipfs ${args['ipfs']} --account <YOURACCOUNT>`.green)
+    }
     else if (args['mode'] === 'ensemble') {
       // Parse other sig
       const otherSig = JSON.parse(args['othersig']);

@@ -3,8 +3,8 @@ import "./utils.sol";
 
 contract Audit {
   // Attach 0x1220 to beggining of ipfsHash
-  event AttachedEvidence(bytes32 indexed codeHash, uint version, bytes32 ipfsHash, address indexed auditedBy);
-  event NewAudit(bytes32 indexed codeHash, uint version, bytes32 ipfsHash, address indexed auditedBy);
+  event AttachedEvidence(bytes32 indexed codeHash, uint indexed version, bytes32 ipfsHash, address indexed auditedBy);
+  event NewAudit(bytes32 indexed codeHash, uint indexed version, bytes32 ipfsHash, address indexed auditedBy);
 
   // Maps code's keccak256 hash to Audit
   mapping (bytes32 => mapping(uint => DS.Proof)) public auditedContracts;

@@ -7,7 +7,9 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
 import AuditedContracts from './AuditedContracts';
-import AuditJson from '../build/contracts/Audit.json';
+import AuditJson from '../../build/contracts/Audit.json';
+
+import constants from './utils/constants';
 
 const styles = theme => ({
   flex: {
@@ -27,7 +29,8 @@ class App extends Component {
       storageValue: 0,
       web3js: null,
       provider: 'unknown',
-      errorMsg: null
+      errorMsg: null,
+      auditContract: null
     }
   }
 
@@ -48,35 +51,14 @@ class App extends Component {
   instantiateContract() {
     const web3js = this.state.web3js;
 
-    if (!(this.state.networkId in AuditJson.deployed)) {
-      this.setState({errorMsg: 'Contract not deployed in this network'});
-      return;
-    }
     const ABI = AuditJson.abi;
-    const address = AuditJson.deployed[this.state.networkId];
     try {
-      const contract = new web3js.eth.Contract(ABI, address);
-      this.setState({monteLabsContract: contract, errorMsg: null});
+      const contract = web3js.eth.contract(ABI).at(constants.Audits);
+      this.setState({auditContract: contract, errorMsg: null});
     }
     catch(error) {
       console.log('ERROR', error)
     }
-
-    // Get accounts.
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    //   simpleStorage.deployed().then((instance) => {
-    //     simpleStorageInstance = instance;
-
-    //     // Stores a given value, 5 by default.
-    //     return simpleStorageInstance.set(5, {from: accounts[0]})
-    //   }).then((result) => {
-    //     // Get the value from the contract to prove it worked.
-    //     return simpleStorageInstance.get.call(accounts[0]);
-    //   }).then((result) => {
-    //     // Update state with the result.
-    //     return this.setState({ storageValue: result.c[0] });
-    //   })
-    // })
   }
 
   ErrorBar = () => {
@@ -109,7 +91,7 @@ class App extends Component {
           </Toolbar>
         </AppBar>
         <this.ErrorBar />
-        <AuditedContracts />
+        <AuditedContracts auditContract={this.state.auditContract}/>
       </div>
     );
   }

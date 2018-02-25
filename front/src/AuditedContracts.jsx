@@ -38,6 +38,7 @@ class AuditedContracts extends Component {
   render() {
     const { classes } = this.props;
     const { reports, showReports } = this.state;
+    const auditContract = this.props.auditContract;
 
     return (
       <Grid container className={classes.root}>
@@ -49,8 +50,11 @@ class AuditedContracts extends Component {
               {verifiedContracts.map(value => (
                 <Grid key={value.name} item>
                   <AuditedContract
+                    auditContract={auditContract}
                     name={value.name}
-                    short_description={value.short_description}
+                    codeHash={value.codeHash}
+                    version={value.version}
+                    shortDescription={value.shortDescription}
                     ipfs_report_addr={value.ipfs_report_addr}
                     getIPFSReports={this.getIPFSReports}
                   />

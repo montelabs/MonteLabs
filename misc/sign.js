@@ -2,6 +2,7 @@
 'use strict';
 var colors = require('colors');
 
+const bs58 = require('bs58');
 const assert = require('assert');
 const Web3 = require('web3');
 const Web3Utils = require('web3-utils');
@@ -33,9 +34,12 @@ parser.addArgument('--ipfs', {help: 'IPFS document hash'});
 
 var args = parser.parseArgs();
 
+const bytes = bs58.decode(args['ipfs']);
+let ipfsHex = bytes.toString('hex');
+
 const message = soliditySha3(
     args['mode'] === 'sign' ? true : false, args['hash'], args['level'],
-    args['ipfs']);
+    ipfsHex);
 
 main();
 

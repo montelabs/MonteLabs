@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "argparse": "^1.0.10",
-    "bignumber.js": "^6.0.0",
     "bs58": "^4.0.1",
     "ipfs": "^0.27.7",
     "material-ui": "^1.0.0-beta.34",
@@ -15,8 +13,8 @@
     "web3": "^1.0.0-beta.30"
   },
   "scripts": {
-    "start": "webpack-dev-server --progress --inline",
-    "build": "webpack --mode production --progress -p"
+    "start": "NODE_ENV=development webpack-dev-server --mode development --progress --inline",
+    "build": "NODE_ENV=production webpack --mode production --progress"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

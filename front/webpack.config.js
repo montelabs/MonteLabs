@@ -23,14 +23,17 @@ const config = {
   devServer: {
     contentBase: './public'
   },
+  performance: {
+    hints: process.env.NODE_ENV === 'production' ? "warning" : false
+  },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        include : __dirname,
+        include : path.resolve(__dirname, 'src'),
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: "babel-loader?cacheDirectory"
         }
       },
       {

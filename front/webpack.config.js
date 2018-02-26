@@ -21,7 +21,12 @@ const config = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './public'
+    contentBase: './public',
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    }
   },
   performance: {
     hints: process.env.NODE_ENV === 'production' ? "warning" : false

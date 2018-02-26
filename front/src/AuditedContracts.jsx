@@ -6,7 +6,6 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 
 import verifiedContracts from './utils/verifiedContracts.json';
-import ipfsReports from './utils/ipfsReports.json';
 import AuditedContract from './AuditedContract';
 import Reports from './Reports';
 

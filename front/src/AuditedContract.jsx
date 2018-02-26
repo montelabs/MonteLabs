@@ -8,7 +8,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import Base58 from 'bs58';
 
-import constants from './utils/constants';
+import constants from './utils/constants.json';
 
 const styles = theme => ({
   root: {

@@ -10,7 +10,7 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 const BUILD_DIR = path.resolve(__dirname, 'dist');
 
 const config = {
-  entry: path.join(__dirname, './src/index.js'),
+  entry: ['babel-polyfill', './src/index.js'],
   output: {
     path: BUILD_DIR,
     filename: 'bundle.js',

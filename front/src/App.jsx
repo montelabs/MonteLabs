@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 import AuditedContracts from './AuditedContracts';
 import AuditJson from '../../build/contracts/Audit.json';
 
-import constants from './utils/constants';
+import constants from './utils/constants.json';
 
 const styles = theme => ({
   flex: {

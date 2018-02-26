@@ -27,20 +27,34 @@ class Reports extends Component {
       IPFSReports: [],
     };
   }
-  render() {
+
+  componentWillMount() {
     let ipfsNode = new IPFS();
     ipfsNode.on('ready', async () => {
       try{
         // var Buffer = require('buffer');
         window.ipfs = ipfsNode;
-        window.Buffer = Buffer;
-        const cosa = await ipfsNode.dag.get('zdpuAxQ2bqEkd17SUaXbUaV7YsvA9VjRJJ1ooZFpV9QuwxinU');
-        console.log(cosa);
+
+        const allProofs = this.props.reports.map(reportAddr => {
+          return ipfsNode.dag.get(reportAddr); 
+        });
+        const proofs = await Promise.all(allProofs);
+        const parsedProofs = proofs.map(proof => {
+          return proof.value.proofs;
+        }).reduce((ans, sproof) => {
+          return ans.concat(sproof);
+        }, []);
+        console.log('proofs', parsedProofs);
+        this.setState({IPFSReports: parsedProofs});
       }
       catch(err) {
         console.log('ERROR', err);
       }
     });
+  }
+
+  render() {
+      
     const { classes, reports, onClose } = this.props;
     return (
       <div>
@@ -69,8 +83,8 @@ class Reports extends Component {
                 <TableRow key={report['/']}>
                   <TableCell>{report.type}</TableCell>
                   <TableCell >
-                    <a href={report['/']}>
-                      {report['/']}
+                    <a target='_blank' href={'https://ipfs.io/ipfs/' + report['/']}>
+                      https://ipfs.io/ipfs/{report['/']}
                     </a>
                   </TableCell>
                 </TableRow>

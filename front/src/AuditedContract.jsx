@@ -46,12 +46,38 @@ const getAudit = (contract, codeHash, version) => {
 class AuditedContract extends Component {
       constructor(props) {
         super(props);
-
         this.state = {
           proofs: []
         };
       }
 
+      // TODO: merge componentWillMount and componentWillReceiveProps functions 
+      componentWillMount() {
+        const {
+          auditContract,
+          codeHash,
+          version
+        } = this.props;
+        if (auditContract !== null) {
+          getAudit(auditContract, codeHash, version).then(audit => {
+            this.setState(audit);
+            auditContract.NewAudit({
+              codeHash: codeHash,
+              auditedBy: constants.MontelabsMS,
+              version: version,
+            },
+            {
+              fromBlock: audit.insertedBlock,
+              toBlock: audit.insertedBlock
+            }, (err, log) => {
+              const ipfsAddr = getIPFSAddress(log.args.ipfsHash)
+              this.setState(prevState => {
+                  return prevState.proofs.push(ipfsAddr);
+              })
+            })
+          })
+        }
+      }
 
       componentWillReceiveProps(nextProps) {
         const {
@@ -85,7 +111,6 @@ class AuditedContract extends Component {
           classes,
           name,
           shortDescription,
-          ipfs_report_addr,
           getIPFSReports
         } = this.props;
         return <Card className={classes.card}>

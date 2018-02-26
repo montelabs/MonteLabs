@@ -1,12 +1,12 @@
 [
   { "name": "MonteLabs",
     "shortDescription": "MonteLabs' own contracts for auditing and verification.",
-    "version": 0,
+    "version": 2,
     "codeHash": "0xa38f31ebacb3beb6ef8f1f384c6e0e70ee0d24039e580830d3abe62410357ecd"
   },
   { "name": "Test",
     "shortDescription": "TEST TEST TEST TES",
-    "version": 1,
+    "version": 2,
     "codeHash": "0xa38f31ebacb3beb6ef8f1f384c6e0e70ee0d24039e580830d3abe62410357ecd"
   },
   { "name": "TEND ICO",

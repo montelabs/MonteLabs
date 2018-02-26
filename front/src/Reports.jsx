@@ -19,61 +19,68 @@ const styles = theme => ({
   },
 });
 
-const Reports = (props) => {
-  let ipfsNode = new IPFS();
-  console.log(ipfsNode);
-  ipfsNode.on('ready', async () => {
-    try{
-      // var Buffer = require('buffer');
-      console.log(ipfsNode.dag.get)
-      window.ipfs = ipfsNode;
-      window.Buffer = Buffer;
-      const cosa = await ipfsNode.files.get('QmQ2r6iMNpky5f1m4cnm3Yqw8VSvjuKpTcK1X7dBR1LkJF');
-      console.log('Hey', cosa);
-    }
-    catch(err) {
-      console.log('ERROR', err);
-    }
-  });
-  const { classes, reports, onClose } = props;
-  return (
-    <div>
-      <Toolbar>
-        <Button className={classes.button} onClick={onClose} size="small" color="primary">
-          <ChevronLeftIcon className={classes.leftIcon} />
-          Back
-        </Button>
-        {/* TODO: map contract names
-        <Typography variant="title" >
-          {contractName} reports
-        </Typography>*/}
-      </Toolbar>
+class Reports extends Component {
 
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Type of Proof</TableCell>
-            <TableCell >IPFS Address</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {reports
-            && reports.map(report => {
-            return (
-              <TableRow key={report.id}>
-                <TableCell>{report.type_of_proof}</TableCell>
-                <TableCell >
-                  <a href={report.ipfs_url}>
-                    {report.ipfs_url} 
-                  </a>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
-  );
+  constructor(props) {
+    super(props);
+    this.state = {
+      IPFSReports: [],
+    };
+  }
+  render() {
+    let ipfsNode = new IPFS();
+    ipfsNode.on('ready', async () => {
+      try{
+        // var Buffer = require('buffer');
+        window.ipfs = ipfsNode;
+        window.Buffer = Buffer;
+        const cosa = await ipfsNode.dag.get('zdpuAxQ2bqEkd17SUaXbUaV7YsvA9VjRJJ1ooZFpV9QuwxinU');
+        console.log(cosa);
+      }
+      catch(err) {
+        console.log('ERROR', err);
+      }
+    });
+    const { classes, reports, onClose } = this.props;
+    return (
+      <div>
+        <Toolbar>
+          <Button className={classes.button} onClick={onClose} size="small" color="primary">
+            <ChevronLeftIcon className={classes.leftIcon} />
+            Back
+          </Button>
+          {/* TODO: map contract names
+          <Typography variant="title" >
+            {contractName} reports
+          </Typography>*/}
+        </Toolbar>
+
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Type of Proof</TableCell>
+              <TableCell >IPFS Address</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reports
+              && this.state.IPFSReports.map(report => {
+              return (
+                <TableRow key={report['/']}>
+                  <TableCell>{report.type}</TableCell>
+                  <TableCell >
+                    <a href={report['/']}>
+                      {report['/']}
+                    </a>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
 }
 
 export default withStyles(styles)(Reports);

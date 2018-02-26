@@ -27,8 +27,8 @@ class AuditedContracts extends Component {
   }
 
   // TODO: get from ipfs
-  getIPFSReports = (ipfs_report_addr) => {
-    this.setState({reports: ipfsReports, showReports: true});
+  getIPFSReports = (ipfsProofs) => {
+    this.setState({reports: ipfsProofs, showReports: true});
   }
 
   onCloseReports = () => {
@@ -55,7 +55,6 @@ class AuditedContracts extends Component {
                     codeHash={value.codeHash}
                     version={value.version}
                     shortDescription={value.shortDescription}
-                    ipfs_report_addr={value.ipfs_report_addr}
                     getIPFSReports={this.getIPFSReports}
                   />
                 </Grid>

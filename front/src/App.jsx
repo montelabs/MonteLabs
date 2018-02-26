@@ -37,7 +37,6 @@ class App extends Component {
   componentWillMount() {
     getWeb3
     .then(results => {
-      console.log(results)
       this.setState(
         results
       )

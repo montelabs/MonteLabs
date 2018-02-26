@@ -6,12 +6,12 @@
   },
   { "name": "Test",
     "shortDescription": "TEST TEST TEST TES",
-    "version": 0,
+    "version": 1,
     "codeHash": "0xa38f31ebacb3beb6ef8f1f384c6e0e70ee0d24039e580830d3abe62410357ecd"
   },
   { "name": "TEND ICO",
     "shortDescription": "The TEND ICO smart contracts, based on OpenZepellin.",
     "version": 0,
-    "codeHash": "0xa38f31ebacb3beb6ef8f1f384c6e0e70ee0d24039e580830d3abe62410357ecd"
+    "codeHash": "0x138f31ebacb3beb6ef8f1f384c6e0e70ee0d24039e580830d3abe62410357ecd"
   }
 ]

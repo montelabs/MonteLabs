@@ -28,7 +28,8 @@ function Sig(web3) {
         if (err) {
           rej(err);
         }
-        sig = sig.substr(2);
+        if (sig.substr(0, 2) === '0x')
+          sig = sig.substr(2);
         let r = '0x' + sig.substr(0, 64);
         let s = '0x' + sig.substr(64, 64);
         let v = sig.substr(128, 2);

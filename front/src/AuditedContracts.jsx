@@ -27,8 +27,8 @@ class AuditedContracts extends Component {
   }
 
   // TODO: get from ipfs
-  getIPFSReports = (ipfs_report_addr) => {
-    this.setState({reports: ipfsReports, showReports: true});
+  getIPFSReports = (ipfsProofs) => {
+    this.setState({reports: ipfsProofs, showReports: true});
   }
 
   onCloseReports = () => {
@@ -38,6 +38,7 @@ class AuditedContracts extends Component {
   render() {
     const { classes } = this.props;
     const { reports, showReports } = this.state;
+    const auditContract = this.props.auditContract;
 
     return (
       <Grid container className={classes.root}>
@@ -49,9 +50,11 @@ class AuditedContracts extends Component {
               {verifiedContracts.map(value => (
                 <Grid key={value.name} item>
                   <AuditedContract
+                    auditContract={auditContract}
                     name={value.name}
-                    short_description={value.short_description}
-                    ipfs_report_addr={value.ipfs_report_addr}
+                    codeHash={value.codeHash}
+                    version={value.version}
+                    shortDescription={value.shortDescription}
                     getIPFSReports={this.getIPFSReports}
                   />
                 </Grid>

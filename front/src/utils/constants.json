@@ -1,4 +1,10 @@
 {
   "MontelabsMS": "0x3202C36efBE25Ebce46f5D4200c14D4c5faa8AFE",
-  "Audits": "0xA1dE4be9789fbD38A79F14692225501fF4337f45"
+  "Audits": "0xA1dE4be9789fbD38A79F14692225501fF4337f45",
+  "IPFSNodes": [
+    {
+      "name": "MonteLabs",
+      "address": "/ip4/45.55.77.153/tcp/9999/ws/ipfs/QmaqLYpiC1k6wHaGJyhK3RpSDo4cGwgsYhiNfKRzdsWkzr"
+    }
+  ]
 }

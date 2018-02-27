@@ -6,6 +6,8 @@ import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import Toolbar from 'material-ui/Toolbar';
 
 import IPFS from 'ipfs';
+import constants from './utils/constants.json';
+
 
 const styles = theme => ({
   table: {
@@ -31,12 +33,22 @@ class Reports extends Component {
   componentWillMount() {
     let ipfsNode = new IPFS();
     ipfsNode.on('ready', async () => {
-      try{
+      try {
+        constants.IPFSNodes.map(node => {
+          ipfs.swarm.connect(node.address, (err, connected) => {
+            if (err) {
+              console.error('[IPFS]', err);
+            }
+            else {
+              console.log(`[IPFS] Connected to ${node.name}`);
+            }
+          });
+        });
         // var Buffer = require('buffer');
         window.ipfs = ipfsNode;
 
         const allProofs = this.props.reports.map(reportAddr => {
-          return ipfsNode.dag.get(reportAddr); 
+          return ipfsNode.dag.get(reportAddr);
         });
         const proofs = await Promise.all(allProofs);
         const parsedProofs = proofs.map(proof => {
@@ -45,16 +57,16 @@ class Reports extends Component {
           return ans.concat(sproof);
         }, []);
         console.log('proofs', parsedProofs);
-        this.setState({IPFSReports: parsedProofs});
+        this.setState({ IPFSReports: parsedProofs });
       }
-      catch(err) {
-        console.log('ERROR', err);
+      catch (err) {
+        console.log('[IPFS] ERROR', err);
       }
     });
   }
 
   render() {
-      
+
     const { classes, reports, onClose } = this.props;
     return (
       <div>
@@ -77,8 +89,7 @@ class Reports extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reports
-              && this.state.IPFSReports.map(report => {
+            {reports && this.state.IPFSReports.map(report => {
               return (
                 <TableRow key={report['/']}>
                   <TableCell>{report.type}</TableCell>

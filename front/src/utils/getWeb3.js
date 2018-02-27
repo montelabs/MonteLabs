@@ -28,7 +28,7 @@ let getWeb3 = new Promise((resolve, reject) => {
         provider
       }
     }
-    else if (typeof web3 !== 'undefined' && false) {
+    else if (typeof web3 !== 'undefined') {
       if (window.web3.currentProvider.isMetaMask) {
         provider = 'MetaMask';
       }

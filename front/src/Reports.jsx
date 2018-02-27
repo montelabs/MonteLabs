@@ -35,7 +35,7 @@ class Reports extends Component {
     ipfsNode.on('ready', async () => {
       try {
         constants.IPFSNodes.map(node => {
-          ipfs.swarm.connect(node.address, (err, connected) => {
+          ipfsNode.swarm.connect(node.address, (err, connected) => {
             if (err) {
               console.error('[IPFS]', err);
             }

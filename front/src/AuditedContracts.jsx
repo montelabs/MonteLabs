@@ -25,7 +25,6 @@ class AuditedContracts extends Component {
     };
   }
 
-  // TODO: get from ipfs
   getIPFSReports = (ipfsProofs) => {
     this.setState({reports: ipfsProofs, showReports: true});
   }
@@ -35,9 +34,8 @@ class AuditedContracts extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, auditContract } = this.props;
     const { reports, showReports } = this.state;
-    const auditContract = this.props.auditContract;
 
     return (
       <Grid container className={classes.root}>

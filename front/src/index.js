@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import purple from 'material-ui/colors/purple';
 import green from 'material-ui/colors/green';
 
 import 'typeface-roboto';
+import App from './App';
 
 const theme = createMuiTheme({
   palette: {
@@ -20,7 +20,7 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
-  <App />
+    <App />
   </MuiThemeProvider>,
   document.getElementById('root')
 );

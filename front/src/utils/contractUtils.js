@@ -61,7 +61,7 @@ const getIPFSAddress = (hexaAddr) => {
 };
 
 const getBlockTimestamp = (web3js, blockNumber) => new Promise(
-    (resolve, reject) => {web3.eth.getBlock(blockNumber, (err, result) => {
+    (resolve, reject) => {web3js.eth.getBlock(blockNumber, (err, result) => {
       if (err)
         reject(err);
       else

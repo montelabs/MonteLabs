@@ -11,6 +11,8 @@ import AuditJson from '../../build/contracts/Audit.json';
 
 import constants from './utils/constants.json';
 
+import IPFS from 'ipfs';
+
 const styles = theme => ({
   flex: {
     flex: 'auto',
@@ -29,35 +31,47 @@ class App extends Component {
       web3js: null,
       provider: 'unknown',
       errorMsg: null,
-      auditContract: null
+      auditContract: null,
+      ipfs: null
     }
   }
 
-  componentWillMount() {
-    getWeb3
-    .then(results => {
-      this.setState(
-        results
-      )
-      this.instantiateContract();
-    })
-    .catch(() => {
-      console.log('Error finding web3.');
-    })
-  }
-
-  instantiateContract() {
-    const web3js = this.state.web3js;
-
-    const ABI = AuditJson.abi;
+  async componentWillMount() {
     try {
-      const contract = web3js.eth.contract(ABI).at(constants.Audits);
-      this.setState({auditContract: contract, errorMsg: null});
+      const web3Results = await getWeb3();
+      const ABI = AuditJson.abi;
+      const contract = web3Results.web3js.eth.contract(ABI).at(constants.Audits);
+      
+      const ipfs = new IPFS();
+      ipfs.on('ready', async () => {
+        constants.IPFSNodes.map(node => {
+          ipfs.swarm.connect(node.address, (err, connected) => {
+            if (err) {
+              console.error('[IPFS]', err);
+            }
+            else {
+              console.log(`[IPFS] Connected to ${node.name}`);
+            }
+          });
+        });
+        this.setState({
+          auditContract: contract,
+          errorMsg: null,
+          ipfs,
+          ...web3Results});
+      });
     }
     catch(error) {
       console.log('ERROR', error)
     }
   }
+
+  // async componentWillMount() {
+  //   let ipfs = new IPFS();
+  //   ipfs.on('ready', async () => {
+  //     this.setState(ipfs);
+  //   });
+
 
   ErrorBar = () => {
     if (this.state.errorMsg == null) return null;
@@ -89,7 +103,7 @@ class App extends Component {
           </Toolbar>
         </AppBar>
         <this.ErrorBar />
-        <AuditedContracts auditContract={this.state.auditContract}/>
+        <AuditedContracts auditContract={this.state.auditContract} ipfs={this.state.ipfs} />
       </div>
     );
   }

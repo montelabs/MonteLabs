@@ -2,42 +2,46 @@ pragma solidity ^0.4.19;
 import "./utils.sol";
 
 contract Audit {
-  // Attach 0x1220 to beggining of ipfsHash
-  event AttachedEvidence(bytes32 indexed codeHash, uint indexed version, bytes32 ipfsHash, address indexed auditedBy);
-  event NewAudit(bytes32 indexed codeHash, uint indexed version, bytes32 ipfsHash, address indexed auditedBy);
+  event AttachedEvidence(address indexed auditorAddr, bytes32 indexed codeHash, bytes32 ipfsHash);
+  event NewAudit(address indexed auditorAddr, bytes32 indexed codeHash);
 
-  // Maps code's keccak256 hash to Audit
-  mapping (bytes32 => mapping(uint => DS.Proof)) public auditedContracts;
-  mapping (bytes32 => uint) public auditVersions;
-  
-  function Audit() public {
-  }
+  // Maps auditor address and code's keccak256 to Audit
+  mapping (address => mapping (bytes32 => DS.Proof)) public auditedContracts;
+  // Maps auditor address to a list of audit code hashes
+  mapping (address => bytes32[]) public auditorContracts;
   
   // Returns code audit level, 0 if not present
-  function isVerifiedAddress(address addr, uint version) public view returns(uint) {
-    var codeHash = keccak256(GetCode(addr));
-    return auditedContracts[codeHash][version].level;
+  function isVerifiedAddress(address _auditorAddr, address _contractAddr) public view returns(uint) {
+    var codeHash = keccak256(GetCode(_contractAddr));
+    return auditedContracts[_auditorAddr][codeHash].level;
   }
 
-  function isVerifiedCode(bytes32 codeHash, uint version) public view returns(uint) {
-    return auditedContracts[codeHash][version].level;
+  function isVerifiedCode(address _auditorAddr, bytes32 _codeHash) public view returns(uint) {
+    return auditedContracts[_auditorAddr][_codeHash].level;
   }
   
   // Add audit information
-  function addAudit(bytes32 codeHash, uint _level, bytes32 ipfsHash) public {
-    auditedContracts[codeHash][auditVersions[codeHash]] = DS.Proof({ 
+  function addAudit(bytes32 _codeHash, uint _level, bytes32 _ipfsHash) public {
+    address auditor = msg.sender;
+    require(auditedContracts[auditor][_codeHash].insertedBlock == 0);
+    auditedContracts[auditor][_codeHash] = DS.Proof({ 
         level: _level,
-        auditedBy: msg.sender,
-        insertedBlock: block.number
+        auditedBy: auditor,
+        insertedBlock: block.number,
+        ipfsHash: _ipfsHash
     });
-    NewAudit(codeHash, auditVersions[codeHash], ipfsHash, msg.sender);
-    ++auditVersions[codeHash];
+    auditorContracts[auditor].push(_codeHash);
+    NewAudit(auditor, _codeHash);
   }
   
-  // Add evidence to audited code, only author
-  function addEvidence(bytes32 codeHash, uint version, bytes32 ipfsHash) public {
-    require(auditedContracts[codeHash][version].auditedBy == msg.sender);
-    AttachedEvidence(codeHash, version, ipfsHash, msg.sender);
+  // Add evidence to audited code, only author, if _newLevel is different from original
+  // updates the contract's level
+  function addEvidence(bytes32 _codeHash, uint _newLevel, bytes32 _ipfsHash) public {
+    address auditor = msg.sender;
+    require(auditedContracts[auditor][_codeHash].insertedBlock != 0);
+    if (auditedContracts[auditor][_codeHash].level != _newLevel)
+      auditedContracts[auditor][_codeHash].level = _newLevel;
+    AttachedEvidence(auditor, _codeHash, _ipfsHash);
   }
 }
 

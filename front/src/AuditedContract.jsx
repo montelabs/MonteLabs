@@ -37,55 +37,14 @@ class AuditedContract extends Component {
     };
   }
 
-  // TODO: merge componentWillMount and componentWillReceiveProps functions
-  componentWillMount() {
-    const {
-      auditContract,
-      codeHash,
-      version,
-    } = this.props;
-    if (auditContract !== null) {
-      this.getAuditContract(auditContract, codeHash, version);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {
-      auditContract,
-      codeHash,
-      version,
-    } = nextProps;
-    if (auditContract !== null) {
-      this.getAuditContract(auditContract, codeHash, version);
-    }
-  }
-
-  getAuditContract(auditContract, codeHash, version) {
-    getAudit(auditContract, codeHash, version).then((audit) => {
-      this.setState(audit);
-      auditContract.NewAudit(
-        {
-          codeHash,
-          auditedBy: constants.MontelabsMS,
-          version,
-        },
-        {
-          fromBlock: audit.insertedBlock,
-          toBlock: audit.insertedBlock,
-        }, (err, log) => {
-          const ipfsAddr = getIPFSAddress(log.args.ipfsHash);
-          this.setState(prevState => prevState.proofs.push(ipfsAddr));
-        },
-      );
-    });
-  }
-
   render() {
     const {
       classes,
       name,
       shortDescription,
-      getIPFSReports,
+      toggleReports,
+      insertedBlock,
+      proofs,
     } = this.props;
     return (
       <Card className={classes.card}>
@@ -97,14 +56,14 @@ class AuditedContract extends Component {
             {shortDescription}
           </Typography>
           <Typography component="p">
-            [DEBUG] Inserted at block: {this.state.insertedBlock}
+            [DEBUG] Inserted at block: {insertedBlock}
           </Typography>
         </CardContent>
         <CardActions>
           <Button
             size="small"
             color="primary"
-            onClick={() => getIPFSReports(this.state.proofs)}
+            onClick={() => toggleReports(proofs)}
           >
             Security report
           </Button>
@@ -119,9 +78,9 @@ AuditedContract.propTypes = {
   classes: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   shortDescription: PropTypes.string.isRequired,
-  getIPFSReports: PropTypes.func.isRequired,
+  toggleReports: PropTypes.func.isRequired,
   codeHash: PropTypes.string.isRequired,
-  version: PropTypes.number.isRequired,
+  insertedBlock: PropTypes.number.isRequired
 };
 
 export default withStyles(styles)(AuditedContract);

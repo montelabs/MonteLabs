@@ -16,22 +16,22 @@ contract MonteLabsMS {
     }
   }
 
-  function addAuditOrEvidence(bool audit, bytes32 _codeHash, uint _levelOrVersion,
+  function addAuditOrEvidence(bool audit, bytes32 _codeHash, uint _level,
                               bytes32 _ipfsHash, uint8 _v, bytes32 _r, 
                               bytes32 _s) internal {
     address sender = msg.sender;
     require(owners[sender]);
 
     bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
-                           keccak256(audit, _codeHash, _levelOrVersion, _ipfsHash));
+                           keccak256(audit, _codeHash, _level, _ipfsHash));
 
     address other = ecrecover(prefixedHash, _v, _r, _s);
     // At least 2 different owners
     assert(other != sender);
     if (audit)
-      auditContract.addAudit(_codeHash, _levelOrVersion, _ipfsHash);
+      auditContract.addAudit(_codeHash, _level, _ipfsHash);
     else
-      auditContract.addEvidence(_codeHash, _levelOrVersion, _ipfsHash);
+      auditContract.addEvidence(_codeHash, _level, _ipfsHash);
   }
 
   function addAudit(bytes32 _codeHash, uint _level, bytes32 _ipfsHash,

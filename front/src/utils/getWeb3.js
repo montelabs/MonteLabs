@@ -11,7 +11,7 @@ const testConnection = (web3) => {
   });
 }
 
-let getWeb3 = new Promise((resolve, reject) => {
+let getWeb3 = () => new Promise((resolve, reject) => {
   // Wait for loading completion to avoid race conditions with web3 injection timing.
   window.addEventListener('load', async function() {
     let results;

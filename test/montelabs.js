@@ -46,9 +46,29 @@ contract('MonteLabs', function(accounts) {
         {from: r_acc});
   });
 
+  it('Should not add same audit', async () => {
+    // let msg =
+    const codeHash = sha3('0x000000000000000100000101010100');
+    const level = 1;
+    const ipfsHash = sha3('0x0abcdef0001000001010fffffff100');
+
+    const message = soliditySha3(true, codeHash, level, ipfsHash);
+    const signatureL = await Sig(l_acc, message);
+
+    try {
+      await monteLabsMS.addAudit(
+        codeHash, level, ipfsHash, signatureL.v, signatureL.r, signatureL.s,
+        {from: r_acc});
+    } catch (err) {
+      return;
+    }
+    assert.fail('Expected throw not received');
+
+  });
+
   it('Should add a new Audit with L and F sigs', async () => {
     // let msg =
-    const codeHash = soliditySha3('0x000000000000000100000101010100');
+    const codeHash = soliditySha3('0x000000000000000100000101010101');
     const level = 1;
     const ipfsHash = soliditySha3('0x0abcdef0001000001010fffffff100');
 
@@ -62,7 +82,7 @@ contract('MonteLabs', function(accounts) {
 
   it('Should add a new Audit with R and F sigs', async () => {
     // let msg =
-    const codeHash = soliditySha3('0x000000000000000100000101010100');
+    const codeHash = soliditySha3('0x000000000000000100000101010102');
     const level = 1;
     const ipfsHash = soliditySha3('0x0abcdef0001000001010fffffff100');
 
@@ -72,9 +92,6 @@ contract('MonteLabs', function(accounts) {
     await monteLabsMS.addAudit(
         codeHash, level, ipfsHash, signatureR.v, signatureR.r, signatureR.s,
         {from: f_acc});
-
-    let versions = await auditInstance.AuditVersions(codeHash);
-    assert(versions.toNumber() == 3, 'Number of versions not right');
   });
 
   it('Should not add a new Audit with only L sig', async () => {

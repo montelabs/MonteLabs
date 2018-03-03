@@ -36,7 +36,6 @@ var args = parser.parseArgs();
 
 const bytes = bs58.decode(args['ipfs']);
 let ipfsHex = '0x' + bytes.toString('hex').substr(8, 64);
-console.log(ipfsHex);
 
 const message = soliditySha3(
     args['mode'] === 'sign' ? true : false, args['hash'], args['level'],
@@ -60,7 +59,6 @@ async function main() {
       const MLContractABI = require('../build/contracts/MonteLabsMS').abi
       const contract = web3.eth.contract(MLContractABI).at(args['MSContract']);
 
-      console.log(ipfsHex);
       if (args['type'] === 'new') {
         contract.addAudit(
             args['hash'], args['level'], ipfsHex, otherSig.v, otherSig.r, otherSig.s,

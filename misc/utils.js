@@ -27,6 +27,7 @@ function Sig(web3) {
       web3.eth.sign(account, msg, (err, sig) => {
         if (err) {
           rej(err);
+          return;
         }
         if (sig.substr(0, 2) === '0x')
           sig = sig.substr(2);

@@ -7,6 +7,7 @@ import Toolbar from 'material-ui/Toolbar';
 
 import IPFS from 'ipfs';
 import constants from './utils/constants.json';
+import dateFormat from 'dateformat';
 
 const styles = theme => ({
   table: {
@@ -20,9 +21,13 @@ const styles = theme => ({
   },
 });
 
+const formatDate = (timestamp) => {
+  const date = new Date(timestamp*1000);
+  return dateFormat(date, "dd/mm/yyyy, HH:MM:ss", true);
+}
+
 const Reports = (props) => {
   const { classes, ipfsProofs, evidences, onClose } = props;
-  console.log(evidences);
   return (
     <div>
       <Toolbar>
@@ -41,11 +46,11 @@ const Reports = (props) => {
           <TableRow>
             <TableCell>Type of Proof</TableCell>
             <TableCell>IPFS Address</TableCell>
-            <TableCell>Timestamp</TableCell>
+            <TableCell>Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {ipfsProofs && ipfsProofs.map(report => {
+          {ipfsProofs && ipfsProofs.proofs.map(report => {
             return (
               <TableRow key={report['/']}>
                 <TableCell>{report.type}</TableCell>
@@ -54,6 +59,7 @@ const Reports = (props) => {
                     https://ipfs.io/ipfs/{report['/']}
                   </a>
                 </TableCell>
+                <TableCell>{formatDate(ipfsProofs.timestamp)}</TableCell>
               </TableRow>
             );
           })}
@@ -70,7 +76,7 @@ const Reports = (props) => {
                       https://ipfs.io/ipfs/{proof['/']}
                     </a>
                   </TableCell>
-                  <TableCell>{evidence.timestamp}</TableCell>
+                  <TableCell>{formatDate(evidence.timestamp)}</TableCell>
                 </TableRow>
               );
             });

@@ -36,7 +36,7 @@ class AuditedContracts extends Component {
 
   toggleReports = (codeHash) => {
     let evidences = this.state.allEvidences.filter(evidence => (codeHash === evidence.codeHash));
-    const ipfsProofs = (this.state.reports.find(report => (report.codeHash === codeHash))).proofs;
+    const ipfsProofs = (this.state.reports.find(report => (report.codeHash === codeHash)));
     this.setState({ ipfsProofs: ipfsProofs, evidences: evidences, showReports: true });
   }
 
@@ -52,13 +52,15 @@ class AuditedContracts extends Component {
       const ipfsAddr = getIPFSAddress(auditedContract.ipfsHash);
 
       const ipfsObj = await ipfs.dag.get(ipfsAddr);
-      return { ...ipfsObj, ...auditedContract }
+      const timestamp = await getBlockTimestamp(this.props.web3js, auditedContract.insertedBlock);
+      return { ...ipfsObj, ...auditedContract, timestamp: timestamp }
     });
     const reportsList = (await Promise.all(reportPromises)).map(report => {
       return ({
         codeHash: report.codeHash,
         insertedBlock: report.insertedBlock,
         level: report.level,
+        timestamp: report.timestamp,
         ...report.value
       });
     });

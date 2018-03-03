@@ -103,7 +103,7 @@ class App extends Component {
           </Toolbar>
         </AppBar>
         <this.ErrorBar />
-        <AuditedContracts auditContract={this.state.auditContract} ipfs={this.state.ipfs} />
+        <AuditedContracts web3js={this.state.web3js} auditContract={this.state.auditContract} ipfs={this.state.ipfs} />
       </div>
     );
   }

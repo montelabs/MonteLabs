@@ -10,7 +10,7 @@ import AuditedContract from './AuditedContract';
 import Reports from './Reports';
 
 import constants from './utils/constants.json';
-import { getAuditedContracts, getIPFSAddress } from './utils/contractUtils';
+import { getAuditedContracts, getIPFSAddress, getBlockTimestamp } from './utils/contractUtils';
 
 import IPFS from 'ipfs'
 
@@ -25,14 +25,19 @@ class AuditedContracts extends Component {
     super(props);
 
     this.state = {
+      web3js: null,
       reports: [],
+      evidences: [],
+      allEvidences: [],
       ipfsProofs: [],
       showReports: false,
     };
   }
 
-  toggleReports = (ipfsProofs) => {
-    this.setState({ ipfsProofs: ipfsProofs, showReports: true });
+  toggleReports = (codeHash) => {
+    let evidences = this.state.allEvidences.filter(evidence => (codeHash === evidence.codeHash));
+    const ipfsProofs = (this.state.reports.find(report => (report.codeHash === codeHash))).proofs;
+    this.setState({ ipfsProofs: ipfsProofs, evidences: evidences, showReports: true });
   }
 
   onCloseReports = () => {
@@ -45,19 +50,37 @@ class AuditedContracts extends Component {
     const auditedContracts = await getAuditedContracts(contract, constants.MontelabsMS);
     const reportPromises = auditedContracts.map(async auditedContract => {
       const ipfsAddr = getIPFSAddress(auditedContract.ipfsHash);
-      
+
       const ipfsObj = await ipfs.dag.get(ipfsAddr);
-      return {...ipfsObj, ...auditedContract}
+      return { ...ipfsObj, ...auditedContract }
     });
     const reportsList = (await Promise.all(reportPromises)).map(report => {
-      return({
+      return ({
         codeHash: report.codeHash,
         insertedBlock: report.insertedBlock,
         level: report.level,
         ...report.value
       });
-    }); 
-    this.setState({reports: reportsList});
+    });
+    this.setState({ reports: reportsList });
+
+    // Treat evidences
+    auditedContracts.map(auditedContract => {
+      contract.AttachedEvidence({
+        auditorAddr: auditedContract.auditedBy,
+        codeHash: auditedContract.codeHash
+      }, { fromBlock: auditedContract.insertedBlock, toBlock: 'latest' }, async (err, event) => {
+        const ipfsAddr = getIPFSAddress(event.args.ipfsHash);
+        const ipfsObj = await ipfs.dag.get(ipfsAddr);
+        const timestamp = await getBlockTimestamp(this.props.web3js, event.blockNumber);
+        this.setState(prevState => prevState.allEvidences.push({
+          evidence: ipfsObj.value,
+          codeHash: auditedContract.codeHash,
+          timestamp: timestamp
+        }));
+      })
+    })
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -66,28 +89,30 @@ class AuditedContracts extends Component {
 
   render() {
     const { classes, auditContract } = this.props;
-    const { reports, showReports, ipfsProofs } = this.state;
+    const { reports, showReports, ipfsProofs, evidences } = this.state;
 
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
           {showReports ? (
-            <Reports ipfsProofs={ipfsProofs} onClose={this.onCloseReports} />
+            <Reports ipfsProofs={ipfsProofs} evidences={evidences} onClose={this.onCloseReports} />
           ) : (
               <Grid container className={classes.demo} justify="flex-start" spacing={8}>
-                {this.state.reports.map(value => (
-                  <Grid key={value.name} item>
-                    <AuditedContract
-                      auditContract={auditContract}
-                      name={value.name}
-                      codeHash={value.codeHash}
-                      shortDescription={value.shortDescription}
-                      insertedBlock={value.insertedBlock}
-                      proofs={value.proofs}
-                      toggleReports={this.toggleReports}
-                    />
-                  </Grid>
-                ))}
+                {this.state.reports.map(value => {
+                  return (
+                    <Grid key={value.name} item>
+                      <AuditedContract
+                        auditContract={auditContract}
+                        name={value.name}
+                        codeHash={value.codeHash}
+                        shortDescription={value.shortDescription}
+                        insertedBlock={value.insertedBlock}
+                        proofs={value.proofs}
+                        toggleReports={this.toggleReports}
+                      />
+                    </Grid>
+                  )
+                })}
               </Grid>
             )}
         </Grid>

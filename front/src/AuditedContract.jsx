@@ -1,6 +1,6 @@
 /* eslint-disable flowtype/require-valid-file-annotation */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
@@ -23,29 +23,16 @@ const styles = theme => ({
   },
 });
 
-const getIPFSAddress = (hexaAddr) => {
-  const IPFS_HASH = '82ddfdec';
-  const ipfsHexa = IPFS_HASH + hexaAddr.substr(2, 64);
-  return Base58.encode(Buffer.from(ipfsHexa, 'hex'));
-};
-
-class AuditedContract extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      proofs: [],
-    };
-  }
-
-  render() {
+const AuditedContract = (props) => {
     const {
       classes,
+      codeHash,
       name,
       shortDescription,
       toggleReports,
       insertedBlock,
       proofs,
-    } = this.props;
+    } = props;
     return (
       <Card className={classes.card}>
         <CardContent>
@@ -63,7 +50,7 @@ class AuditedContract extends Component {
           <Button
             size="small"
             color="primary"
-            onClick={() => toggleReports(proofs)}
+            onClick={() => toggleReports(codeHash)}
           >
             Security report
           </Button>
@@ -71,7 +58,7 @@ class AuditedContract extends Component {
       </Card>
     );
   }
-}
+
 
 AuditedContract.propTypes = {
   auditContract: PropTypes.object,

@@ -21,8 +21,8 @@ const styles = theme => ({
 });
 
 const Reports = (props) => {
-  const { classes, ipfsProofs, onClose } = props;
-  console.log('ipfsProofs', ipfsProofs);
+  const { classes, ipfsProofs, evidences, onClose } = props;
+  console.log(evidences);
   return (
     <div>
       <Toolbar>
@@ -41,6 +41,7 @@ const Reports = (props) => {
           <TableRow>
             <TableCell>Type of Proof</TableCell>
             <TableCell>IPFS Address</TableCell>
+            <TableCell>Timestamp</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,6 +56,24 @@ const Reports = (props) => {
                 </TableCell>
               </TableRow>
             );
+          })}
+        </TableBody>
+        <TableBody>
+          {evidences.map(evidence => {
+            const proofs = evidence.evidence.proofs;
+            return proofs.map(proof => {
+              return (
+                <TableRow key={proof['/']}>
+                  <TableCell>{proof.type}</TableCell>
+                  <TableCell >
+                    <a target='_blank' href={'https://ipfs.io/ipfs/' + proof['/']}>
+                      https://ipfs.io/ipfs/{proof['/']}
+                    </a>
+                  </TableCell>
+                  <TableCell>{evidence.timestamp}</TableCell>
+                </TableRow>
+              );
+            });
           })}
         </TableBody>
       </Table>

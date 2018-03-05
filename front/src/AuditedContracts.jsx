@@ -6,7 +6,7 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 
 import verifiedContracts from './utils/verifiedContracts.json';
-import AuditedContract from './AuditedContract';
+import { AuditedContract, AuditedContractPending } from './AuditedContract';
 import Reports from './Reports';
 
 import constants from './utils/constants.json';
@@ -48,6 +48,7 @@ class AuditedContracts extends Component {
     if (contract == null || ipfs === null)
       return;
     const auditedContracts = await getAuditedContracts(contract, constants.MontelabsMS);
+    this.setState({ reports: auditedContracts});
     const reportPromises = auditedContracts.map(async auditedContract => {
       const ipfsAddr = getIPFSAddress(auditedContract.ipfsHash);
 
@@ -101,8 +102,19 @@ class AuditedContracts extends Component {
           ) : (
               <Grid container className={classes.demo} justify="flex-start" spacing={8}>
                 {this.state.reports.map(value => {
+                  if (value.pending) {
+                    return (
+                      <Grid key={value.codeHash} item>
+                        <AuditedContractPending 
+                          auditContract={auditContract}
+                          codeHash={value.codeHash}
+                          insertedBlock={value.insertedBlock}
+                          />
+                      </Grid>
+                    );
+                  }
                   return (
-                    <Grid key={value.name} item>
+                    <Grid key={value.codeHash} item>
                       <AuditedContract
                         auditContract={auditContract}
                         name={value.name}

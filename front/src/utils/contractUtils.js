@@ -8,6 +8,7 @@ const getAudit = (contract, auditor, codeHash) =>
         } else {
           resolve({
             codeHash: codeHash,
+            pending: true, // Pending information from IPFS
             level: audit[0].toNumber(),
             insertedBlock: audit[1].toNumber(),
             ipfsHash: audit[2],

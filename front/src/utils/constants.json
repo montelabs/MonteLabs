@@ -4,7 +4,11 @@
   "IPFSNodes": [
     {
       "name": "MonteLabs",
-      "address": "/ip4/45.55.77.153/tcp/9999/ws/ipfs/QmaqLYpiC1k6wHaGJyhK3RpSDo4cGwgsYhiNfKRzdsWkzr"
+      "address": "/dns4/montelabs.com/tcp/9999/ws/ipfs/QmaqLYpiC1k6wHaGJyhK3RpSDo4cGwgsYhiNfKRzdsWkzr"
+    },
+    {
+      "name": "Leonardo",
+      "address": "/dns4/leonardoalt.ddns.net/tcp/9999/ws/ipfs/QmezWnbMVYSnkgVnKhyq9YaToxyiUdpKCS3pQtBVc3Hiwc"
     }
   ]
 }

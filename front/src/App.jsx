@@ -47,7 +47,7 @@ class App extends Component {
         constants.IPFSNodes.map(node => {
           ipfs.swarm.connect(node.address, (err, connected) => {
             if (err) {
-              console.error('[IPFS]', err);
+              console.error(`[IPFS] Could not connect to ${node.name}`);
             }
             else {
               console.log(`[IPFS] Connected to ${node.name}`);

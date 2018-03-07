@@ -8,7 +8,11 @@
     },
     {
       "name": "Leonardo",
-      "address": "/dns4/leonardoalt.ddns.net/tcp/9999/ws/ipfs/QmezWnbMVYSnkgVnKhyq9YaToxyiUdpKCS3pQtBVc3Hiwc"
+      "address": "/dns4/leonardoalt.ddns.net/tcp/8888/ws/ipfs/QmezWnbMVYSnkgVnKhyq9YaToxyiUdpKCS3pQtBVc3Hiwc"
+    },
+    {
+      "name": "Fynn",
+      "address": "/dns4/ipfs.enriquefynn.com/tcp/9999/ws/ipfs/QmSDwdbG1H7iWqDnhBh5sCjaYP5MS5kSCQVLRZuK9g6Qs9"
     }
   ]
 }

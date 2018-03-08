@@ -13,6 +13,10 @@
     {
       "name": "Fynn",
       "address": "/dns4/ipfs.enriquefynn.com/tcp/9999/ws/ipfs/QmSDwdbG1H7iWqDnhBh5sCjaYP5MS5kSCQVLRZuK9g6Qs9"
+    },
+    {
+      "name": "Rodrigo",
+      "address": "/dns4/ipfs.healmage.com/tcp/9999/ws/ipfs/QmVmm5yYYyXv2Gmo4DKe4zKdqTutfLgqy4Qtg9zd8sFeuw"
     }
   ]
 }

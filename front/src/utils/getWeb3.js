@@ -1,74 +1,120 @@
 import Web3 from 'web3';
+// import Web3Eth from 'web3-core-requestmanager/';
 
-const testConnection = (web3) => {
-  return new Promise((resolve, reject) => {
-    web3.eth.getBlock(0, (err, res) => {
-      if (err)
-        resolve(false);
-      else
-        resolve(true);
-    })
-  });
+
+const testConnection =
+    (web3) => {
+      return new Promise(
+          (resolve, reject) => {web3.eth.getBlock(0, (err, res) => {
+            if (err)
+              resolve(false);
+            else
+              resolve(true);
+          })});
+    }
+
+
+const connectToLocal = async () => {
+  const pr = new Web3.providers.HttpProvider('http://localhost:8545');
+  const web3js = new Web3(pr);
+  const provider = 'local';
+  const isLocal = await testConnection(web3js);
+  if (!islocal)
+    throw new Error('Failed to connect to local provider');
+  return {web3js, provider};
 }
 
-let getWeb3 = () => new Promise((resolve, reject) => {
-  // Wait for loading completion to avoid race conditions with web3 injection timing.
-  window.addEventListener('load', async function() {
-    let results;
-    let web3js;
-    let provider = null;
-    let pr = new Web3.providers.HttpProvider('http://localhost:8545');
-    web3js = new Web3(pr);
+const connectToBrowser = async () => {
+  const pr = new Web3.providers.HttpProvider('http://localhost:8545');
+  let provider;
+  if (typeof web3 === 'undefined') {
+    throw new Error('Failed to connect to browser provider');
+  }
+  if (window.web3.currentProvider.isMetaMask)
+    provider = 'metamask';
+  else
+    provider = 'native';
 
-    const isLocal = await testConnection(web3js);
-    if (isLocal) {
-      provider = 'Local';
-      results = {
-        web3js,
-        provider
-      }
+  const web3js = new Web3(window.web3.currentProvider);
+  return {web3js, provider};
+}
+
+const connectToInfura = async () => {
+  const pr = new Web3.providers.HttpProvider('https://kovan.infura.io/DM5TjoIO6E0LEkDkYDtd');
+  const provider = 'infura';
+  const web3js = new Web3(pr);
+  return {web3js, provider};
+}
+
+const tryAllProviders = async () => {
+  let results;
+  // Try in order Local, browser, infura
+  try {
+    results = await connectToLocal();
+  }
+  catch(err) {
+    console.log('[web3] Local node not found');
+    try {
+      results = await connectToBrowser();
     }
-    else if (typeof web3 !== 'undefined') {
-      if (window.web3.currentProvider.isMetaMask) {
-        provider = 'MetaMask';
-      }
-      else {
-        provider = 'Custom';
-      }
-      web3js = new Web3(window.web3.currentProvider);
-      results = {
-        web3js,
-        provider
-      }
-    } 
-    else {
-      // let pr = new Web3.providers.HttpProvider('http://localhost:8545');
-      let pr = new Web3.providers.HttpProvider('https://kovan.infura.io/DM5TjoIO6E0LEkDkYDtd');
-
-      provider = 'Infura';
-      web3js = new Web3(pr);
-
-      results = {
-        web3js,
-        provider
-      };
-      console.log('No web3 instance injected, using infura\'s provider');
+    catch(err) {
+      consol.elog('[web3] Browser node not found');
+      results = await connectToInfura();
     }
-    const networkId = web3js.version.network;
-    let networkName = null;
-    if (networkId === '1')
-        networkName = 'Main Ethereum';
-    else if (networkId === '3')
-        networkName = 'Ropsten';
-    else if (networkId === '4')
-        networkName = 'Rinkeby';
-    else if (networkId === '42')
-        networkName = 'Kovan';
-     else
-        networkName = 'Private';
+  }
+  return results;
+};
+
+const getWeb3 = async (params = null) => {
+  let results = null;
+  if (params === null)
+    results = await tryAllProviders();
   
-    resolve({ ...results, networkId, networkName });
-  })
-})
+  else if (params.provider === 'local') {
+    try {
+      console.log('Trying to connect to local');
+      results = await connectToLocal();
+    }
+    catch(err) {
+      console.error('[web3] Failed to connect to local');
+      results = await tryAllProviders();
+    }
+  }
+  else if (params.provider === 'metamask' || params.provider === 'native') {
+    try {
+      console.log('Trying to connect to native');
+      results = await connectToBrowser();
+    }
+    catch(err) {
+      console.error('[web3] Failed to connect to native');
+      results = await tryAllProviders();
+    }
+  }
+  else if (params.provider === 'infura') {
+    try {
+      console.log('Trying to connect to infura');
+      results = await connectToInfura();
+    }
+    catch(err) {
+      console.error('[web3] Failed to connect to infura');
+      results = await tryAllProviders();
+    }
+  }
+
+  const networkId = await results.web3js.eth.net.getId();
+  let networkName = null;
+  if (networkId === 1)
+    networkName = 'Main Ethereum';
+  else if (networkId === 3)
+    networkName = 'Ropsten';
+  else if (networkId === 4)
+    networkName = 'Rinkeby';
+  else if (networkId === 42)
+    networkName = 'Kovan';
+  else
+    networkName = 'Private';
+
+  return {...results, networkId, networkName};
+};
 
 export default getWeb3

@@ -1,46 +1,25 @@
 import Base58 from 'bs58';
 
-const getAudit = (contract, auditor, codeHash) =>
-    (new Promise((resolve, reject) => {
-      contract.auditedContracts.call(auditor, codeHash, (err, audit) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({
-            codeHash: codeHash,
-            pending: true, // Pending information from IPFS
-            level: audit[0].toNumber(),
-            insertedBlock: audit[1].toNumber(),
-            ipfsHash: audit[2],
-            auditedBy: audit[3]
-          });
-        }
-      });
-    }));
-
-const getAuditedContractByIndex = (contract, auditor, index) => {
-  return new Promise((resolve, reject) => {
-    contract.auditorContracts.call(auditor, index, (err, auditHash) => {
-      if (err)
-        reject(err);
-      else {
-        resolve(auditHash);
-      }
-    });
-  });
-};
+const getAudit =
+    async (contract, auditor, codeHash) => {
+  let auditedContract =
+      await contract.methods.auditedContracts(auditor, codeHash).call({});
+  return {codeHash: codeHash, pending: true, ...auditedContract};
+}
 
 const getAuditedCodeHashes = async (contract, auditor) => {
   let contractHashes = [];
   try {
     let i = 0;
     while (true) {
-      let contractHash = await getAuditedContractByIndex(contract, auditor, i);
-      if (contractHash === '0x') {
+      try {
+        let contractHash =
+            await contract.methods.auditorContracts(auditor, i).call({});
+        contractHashes.push(contractHash);
+        ++i;
+      } catch (err) {
         return contractHashes;
       }
-      contractHashes.push(contractHash);
-      ++i;
     }
   } catch (err) {
     console.error('[getAuditedCodeHashes]', err);

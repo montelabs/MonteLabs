@@ -5,6 +5,8 @@ import getWeb3 from './utils/getWeb3';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
+import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/Menu/MenuItem';
 
 import AuditedContracts from './AuditedContracts';
 import AuditJson from '../../build/contracts/Audit.json';
@@ -32,16 +34,17 @@ class App extends Component {
       provider: 'unknown',
       errorMsg: null,
       auditContract: null,
-      ipfs: null
+      ipfs: null,
     }
   }
 
-  async componentWillMount() {
+  // FIXME: Are there race conditions with window.web3?
+  async componentDidMount() {
     try {
       const web3Results = await getWeb3();
       const ABI = AuditJson.abi;
-      const contract = web3Results.web3js.eth.contract(ABI).at(constants.Audits);
-      
+      const contract = new web3Results.web3js.eth.Contract(ABI, constants.Audits);
+
       const ipfs = new IPFS();
       ipfs.on('ready', async () => {
         constants.IPFSNodes.map(node => {
@@ -58,34 +61,51 @@ class App extends Component {
           auditContract: contract,
           errorMsg: null,
           ipfs,
-          ...web3Results});
+          ...web3Results
+        });
       });
     }
-    catch(error) {
+    catch (error) {
       console.log('ERROR', error)
     }
   }
 
-  // async componentWillMount() {
-  //   let ipfs = new IPFS();
-  //   ipfs.on('ready', async () => {
-  //     this.setState(ipfs);
-  //   });
-
-
   ErrorBar = () => {
     if (this.state.errorMsg == null) return null;
     return (
-    <AppBar position='static' color='inherit'>
-      <Typography variant='headline' color='error'>
-        Error: {this.state.errorMsg}
-      </Typography>
-    </AppBar>
+      <AppBar position='static' color='inherit'>
+        <Typography variant='headline' color='error'>
+          Error: {this.state.errorMsg}
+        </Typography>
+      </AppBar>
     )
   }
 
+  handleChange = name => async event => {
+    const web3Results = await getWeb3({ provider: event.target.value });
+    this.setState({ ...web3Results });
+  };
+
   render() {
     const { classes } = this.props;
+    const providers = [
+      {
+        value: 'local',
+        label: 'Local',
+      },
+      {
+        value: 'metamask',
+        label: 'MetaMask',
+      },
+      {
+        value: 'native',
+        label: 'Browser',
+      },
+      {
+        value: 'infura',
+        label: 'Infura',
+      },
+    ];
 
     return (
       <div className={classes.wrapper}>
@@ -95,7 +115,25 @@ class App extends Component {
               Security Audits
             </Typography>
             <Typography variant='subheading' color='inherit' className={classes.flex}>
-              Web3 Provider: {this.state.provider}
+              <TextField
+                id='select-Provider'
+                select
+                label='Provider'
+                className={classes.textField}
+                value={this.state.provider}
+                onChange={this.handleChange('provider')}
+                SelectProps={{
+                  MenuProps: {
+                    className: classes.menu,
+                  },
+                }}
+              >{providers.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+              </TextField>
+
             </Typography>
             <Typography variant='subheading' color='inherit'>
               Network: {this.state.networkName}

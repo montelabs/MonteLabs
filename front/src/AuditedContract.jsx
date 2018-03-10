@@ -90,13 +90,13 @@ AuditedContract.propTypes = {
   shortDescription: PropTypes.string.isRequired,
   toggleReports: PropTypes.func.isRequired,
   codeHash: PropTypes.string.isRequired,
-  insertedBlock: PropTypes.number.isRequired
+  insertedBlock: PropTypes.string.isRequired
 };
 
 AuditedContractPending.propTypes = {
   auditContract: PropTypes.object,
   codeHash: PropTypes.string.isRequired,
-  insertedBlock: PropTypes.number.isRequired
+  insertedBlock: PropTypes.string.isRequired
 };
 
 export { AuditedContract, AuditedContractPending };

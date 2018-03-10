@@ -48,7 +48,7 @@ class AuditedContracts extends Component {
     if (contract == null || ipfs === null)
       return;
     const auditedContracts = await getAuditedContracts(contract, constants.MontelabsMS);
-    this.setState({ reports: auditedContracts});
+    this.setState({ reports: auditedContracts });
     const reportPromises = auditedContracts.map(async auditedContract => {
       const ipfsAddr = getIPFSAddress(auditedContract.ipfsHash);
 
@@ -69,20 +69,24 @@ class AuditedContracts extends Component {
 
     // Treat evidences
     auditedContracts.map(auditedContract => {
-      contract.AttachedEvidence({
-        auditorAddr: auditedContract.auditedBy,
-        codeHash: auditedContract.codeHash
-      }, { fromBlock: auditedContract.insertedBlock, toBlock: 'latest' }, async (err, event) => {
-        const ipfsAddr = getIPFSAddress(event.args.ipfsHash);
-        const ipfsObj = await ipfs.dag.get(ipfsAddr);
-        const timestamp = await getBlockTimestamp(this.props.web3js, event.blockNumber);
-        this.setState(prevState => prevState.allEvidences.push({
-          evidence: ipfsObj.value,
-          codeHash: auditedContract.codeHash,
-          timestamp: timestamp
-        }));
-      })
-    })
+      contract.getPastEvents('AttachedEvidence', {
+        filter: {
+          auditorAddr: auditedContract.auditedBy,
+          codeHash: auditedContract.codeHash
+        }, fromBlock: auditedContract.insertedBlock, toBlock: 'latest'
+      }, (err, events) => {
+        events.map(async event => {
+          const ipfsAddr = getIPFSAddress(event.returnValues.ipfsHash);
+          const ipfsObj = await ipfs.dag.get(ipfsAddr);
+          const timestamp = await getBlockTimestamp(this.props.web3js, event.blockNumber);
+          this.setState(prevState => prevState.allEvidences.push({
+            evidence: ipfsObj.value,
+            codeHash: auditedContract.codeHash,
+            timestamp: timestamp
+          }));
+        });
+      });
+    });
 
   }
 
@@ -105,11 +109,11 @@ class AuditedContracts extends Component {
                   if (value.pending) {
                     return (
                       <Grid key={value.codeHash} item>
-                        <AuditedContractPending 
+                        <AuditedContractPending
                           auditContract={auditContract}
                           codeHash={value.codeHash}
                           insertedBlock={value.insertedBlock}
-                          />
+                        />
                       </Grid>
                     );
                   }

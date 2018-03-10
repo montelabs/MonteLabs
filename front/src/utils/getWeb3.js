@@ -58,7 +58,7 @@ const tryAllProviders = async () => {
       results = await connectToBrowser();
     }
     catch(err) {
-      consol.elog('[web3] Browser node not found');
+      console.log('[web3] Browser node not found');
       results = await connectToInfura();
     }
   }

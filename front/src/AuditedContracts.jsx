@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 
-import verifiedContracts from './utils/verifiedContracts.json';
 import { AuditedContract, AuditedContractPending } from './AuditedContract';
 import Reports from './Reports';
 
@@ -122,6 +121,7 @@ class AuditedContracts extends Component {
                       <AuditedContract
                         auditContract={auditContract}
                         name={value.name}
+                        logo={value.logo}
                         codeHash={value.codeHash}
                         shortDescription={value.shortDescription}
                         insertedBlock={value.insertedBlock}

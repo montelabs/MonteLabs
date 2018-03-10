@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Card, { CardMedia, CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import { CircularProgress } from 'material-ui/Progress'
@@ -23,6 +23,9 @@ const styles = theme => ({
     marginRight: 12,
     marginTop: 12,
   },
+  media: {
+    height: 250,
+  },
 });
 
 const AuditedContract = withStyles(styles)((props) => {
@@ -31,12 +34,17 @@ const AuditedContract = withStyles(styles)((props) => {
     codeHash,
     name,
     shortDescription,
+    logo,
     toggleReports,
     insertedBlock,
     proofs,
   } = props;
   return (
     <Card className={classes.card}>
+      <CardMedia
+        className={classes.media}
+        image={'https://ipfs.io/ipfs/' + logo}
+      />
       <CardContent>
         <Typography variant="headline" component="h2">
           {name}
@@ -88,6 +96,7 @@ AuditedContract.propTypes = {
   auditContract: PropTypes.object,
   name: PropTypes.string.isRequired,
   shortDescription: PropTypes.string.isRequired,
+  logo: PropTypes.string,
   toggleReports: PropTypes.func.isRequired,
   codeHash: PropTypes.string.isRequired,
   insertedBlock: PropTypes.string.isRequired

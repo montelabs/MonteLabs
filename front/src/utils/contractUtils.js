@@ -40,13 +40,12 @@ const getIPFSAddress = (hexaAddr) => {
   return Base58.encode(Buffer.from(ipfsHexa, 'hex'));
 };
 
-const getBlockTimestamp = (web3js, blockNumber) => new Promise(
-    (resolve, reject) => {web3js.eth.getBlock(blockNumber, (err, result) => {
-      if (err)
-        reject(err);
-      else
-        resolve(result.timestamp);
-    })});
-
+const getBlockTimestamp = async (web3js, blockNumber) => {
+    const block = await web3js.eth.getBlock(blockNumber);
+    // If can't get block, return the first one
+    if (block === null)
+      return 0;
+    return block.timestamp;
+}
 
 export {getAuditedContracts, getIPFSAddress, getBlockTimestamp};

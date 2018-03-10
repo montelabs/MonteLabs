@@ -45,7 +45,6 @@ class AuditedContracts extends Component {
   }
 
   async initialize(contract, ipfs) {
-    console.log('a');
     if (contract == null || ipfs === null)
       return;
     const auditedContracts = await getAuditedContracts(contract, constants.MontelabsMS);

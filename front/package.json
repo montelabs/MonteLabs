@@ -12,7 +12,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "typeface-roboto": "0.0.54",
-    "web3": "^0.19"
+    "web3": "^0.19",
+    "web3-eth": "^1.0.0-beta.30"
   },
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --mode development --progress --inline",

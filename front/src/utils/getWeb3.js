@@ -1,26 +1,10 @@
 import Web3 from 'web3';
-// import Web3Eth from 'web3-core-requestmanager/';
-
-
-const testConnection =
-    (web3) => {
-      return new Promise(
-          (resolve, reject) => {web3.eth.getBlock(0, (err, res) => {
-            if (err)
-              resolve(false);
-            else
-              resolve(true);
-          })});
-    }
-
 
 const connectToLocal = async () => {
   const pr = new Web3.providers.HttpProvider('http://localhost:8545');
   const web3js = new Web3(pr);
   const provider = 'local';
-  const isLocal = await testConnection(web3js);
-  if (!islocal)
-    throw new Error('Failed to connect to local provider');
+  await web3js.eth.getBlockNumber();
   return {web3js, provider};
 }
 
@@ -114,6 +98,7 @@ const getWeb3 = async (params = null) => {
   else
     networkName = 'Private';
 
+  window.web3js = results.web3js;
   return {...results, networkId, networkName};
 };
 

@@ -43,7 +43,7 @@ const AuditedContract = withStyles(styles)((props) => {
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
-        image={'https://ipfs.io/ipfs/' + logo}
+        image={(logo !== undefined) ? ('https://ipfs.io/ipfs/' + logo) : '/images/placeholder.png'}
       />
       <CardContent>
         <Typography variant="headline" component="h2">
@@ -51,9 +51,6 @@ const AuditedContract = withStyles(styles)((props) => {
         </Typography>
         <Typography component="p">
           {shortDescription}
-        </Typography>
-        <Typography component="p">
-          [DEBUG] Inserted at block: {insertedBlock}
         </Typography>
       </CardContent>
       <CardActions>

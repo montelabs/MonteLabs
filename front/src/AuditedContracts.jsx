@@ -45,6 +45,7 @@ class AuditedContracts extends Component {
   }
 
   async initialize(contract, ipfs) {
+    console.log('a');
     if (contract == null || ipfs === null)
       return;
     const auditedContracts = await getAuditedContracts(contract, constants.MontelabsMS);
@@ -65,7 +66,7 @@ class AuditedContracts extends Component {
         ...report.value
       });
     });
-    this.setState({ reports: reportsList });
+    this.setState({ reports: reportsList, allEvidences: [] });
 
     // Treat evidences
     auditedContracts.map(auditedContract => {

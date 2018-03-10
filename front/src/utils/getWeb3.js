@@ -72,7 +72,7 @@ const getWeb3 = async (params = null) => {
   
   else if (params.provider === 'local') {
     try {
-      console.log('Trying to connect to local');
+      console.log('[web3] Trying to connect to local');
       results = await connectToLocal();
     }
     catch(err) {
@@ -82,7 +82,7 @@ const getWeb3 = async (params = null) => {
   }
   else if (params.provider === 'metamask' || params.provider === 'native') {
     try {
-      console.log('Trying to connect to native');
+      console.log('[web3] Trying to connect to native');
       results = await connectToBrowser();
     }
     catch(err) {
@@ -92,7 +92,7 @@ const getWeb3 = async (params = null) => {
   }
   else if (params.provider === 'infura') {
     try {
-      console.log('Trying to connect to infura');
+      console.log('[web3] Trying to connect to infura');
       results = await connectToInfura();
     }
     catch(err) {

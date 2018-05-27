@@ -43,7 +43,7 @@ class App extends Component {
     try {
       const web3Results = await getWeb3();
       const ABI = AuditJson.abi;
-      const contract = new web3Results.web3js.eth.Contract(ABI, constants.Audits);
+      const contract = new web3Results.web3js.eth.Contract(ABI, constants.contracts[web3Results.networkId].Audits);
 
       const ipfs = new IPFS();
       ipfs.on('ready', async () => {
@@ -141,7 +141,11 @@ class App extends Component {
           </Toolbar>
         </AppBar>
         <this.ErrorBar />
-        <AuditedContracts web3js={this.state.web3js} auditContract={this.state.auditContract} ipfs={this.state.ipfs} />
+        <AuditedContracts
+          web3js={this.state.web3js}
+          auditContract={this.state.auditContract}
+          ipfs={this.state.ipfs}
+          networkId={this.state.networkId} />
       </div>
     );
   }

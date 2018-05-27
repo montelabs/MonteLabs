@@ -8,7 +8,7 @@ contract MonteLabsMS {
   uint8 constant quorum = 2;
   Audit public auditContract;
 
-  function MonteLabsMS(address[] _owners, Audit _auditContract) public {
+  constructor(address[] _owners, Audit _auditContract) public {
     auditContract = _auditContract;
     require(_owners.length == 3);
     for (uint i = 0; i < _owners.length; ++i) {

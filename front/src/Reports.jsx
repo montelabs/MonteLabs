@@ -6,7 +6,6 @@ import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import Toolbar from 'material-ui/Toolbar';
 
 import IPFS from 'ipfs';
-import constants from './utils/constants.json';
 import dateFormat from 'dateformat';
 
 const styles = theme => ({

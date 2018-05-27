@@ -43,10 +43,10 @@ class AuditedContracts extends Component {
     this.setState({ showReports: false });
   }
 
-  async initialize(contract, ipfs) {
+  async initialize(contract, ipfs, networkId) {
     if (contract == null || ipfs === null)
       return;
-    const auditedContracts = await getAuditedContracts(contract, constants.MontelabsMS);
+    const auditedContracts = await getAuditedContracts(contract, constants.contracts[networkId].MontelabsMS);
     this.setState({ reports: auditedContracts });
     const reportPromises = auditedContracts.map(async auditedContract => {
       const ipfsAddr = getIPFSAddress(auditedContract.ipfsHash);
@@ -90,7 +90,7 @@ class AuditedContracts extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.initialize(newProps.auditContract, newProps.ipfs);
+    this.initialize(newProps.auditContract, newProps.ipfs, newProps.networkId);
   }
 
   render() {

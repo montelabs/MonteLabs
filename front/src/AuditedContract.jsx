@@ -10,7 +10,6 @@ import { CircularProgress } from 'material-ui/Progress'
 
 import Base58 from 'bs58';
 
-import constants from './utils/constants.json';
 import getAudit from './utils/contractUtils';
 
 const styles = theme => ({

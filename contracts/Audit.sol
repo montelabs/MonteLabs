@@ -1,5 +1,13 @@
-pragma solidity ^0.4.19;
-import "./utils.sol";
+pragma solidity ^0.4.24;
+
+library DS {
+  struct Proof {
+    uint level;         // Audit level
+    uint insertedBlock; // Audit's block
+    bytes32 ipfsHash;   // IPFS dag-cbor proof
+    address auditedBy;  // Audited by address
+  }
+}
 
 contract Audit {
   event AttachedEvidence(address indexed auditorAddr, bytes32 indexed codeHash, bytes32 ipfsHash);
@@ -12,7 +20,7 @@ contract Audit {
   
   // Returns code audit level, 0 if not present
   function isVerifiedAddress(address _auditorAddr, address _contractAddr) public view returns(uint) {
-    var codeHash = keccak256(GetCode(_contractAddr));
+    bytes32 codeHash = keccak256(codeAt(_contractAddr));
     return auditedContracts[_auditorAddr][codeHash].level;
   }
 
@@ -31,7 +39,7 @@ contract Audit {
         ipfsHash: _ipfsHash
     });
     auditorContracts[auditor].push(_codeHash);
-    NewAudit(auditor, _codeHash);
+    emit NewAudit(auditor, _codeHash);
   }
   
   // Add evidence to audited code, only author, if _newLevel is different from original
@@ -41,7 +49,23 @@ contract Audit {
     require(auditedContracts[auditor][_codeHash].insertedBlock != 0);
     if (auditedContracts[auditor][_codeHash].level != _newLevel)
       auditedContracts[auditor][_codeHash].level = _newLevel;
-    AttachedEvidence(auditor, _codeHash, _ipfsHash);
+    emit AttachedEvidence(auditor, _codeHash, _ipfsHash);
+  }
+
+  function codeAt(address _addr) public view returns (bytes code) {
+    assembly {
+      // retrieve the size of the code, this needs assembly
+      let size := extcodesize(_addr)
+      // allocate output byte array - this could also be done without assembly
+      // by using o_code = new bytes(size)
+      code := mload(0x40)
+      // new "memory end" including padding
+      mstore(0x40, add(code, and(add(add(size, 0x20), 0x1f), not(0x1f))))
+      // store length in memory
+      mstore(code, size)
+      // actually retrieve the code, this needs assembly
+      extcodecopy(_addr, add(code, 0x20), 0, size)
+    }
   }
 }
 

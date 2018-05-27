@@ -29,6 +29,7 @@ parser.addArgument(
 );
 parser.addArgument('--type', {choices: ['new', 'evidence']});
 parser.addArgument('--hash', {help: 'New Audit code hash'});
+parser.addArgument('--code', {help: 'New Audit code'});
 parser.addArgument('--level', {help: 'baz bar'});
 parser.addArgument('--ipfs', {help: 'IPFS document hash'});
 
@@ -37,19 +38,26 @@ var args = parser.parseArgs();
 const bytes = bs58.decode(args['ipfs']);
 let ipfsHex = '0x' + bytes.toString('hex').substr(8, 64);
 
-const message = soliditySha3(
-    args['mode'] === 'sign' ? true : false, args['hash'], args['level'],
-    ipfsHex);
-
 main();
 
 async function main() {
   try {
+
+    var codehash = args['hash'];
+    if (args['code'] != null)
+      codehash = sha3(args['code']);
+
+    const message = soliditySha3(
+      args['mode'] === 'sign' ? true : false, codehash, args['level'],
+      ipfsHex);
+    
+    console.log(codehash);
+
     if (args['mode'] === 'sign') {
       const signature = await Sig(args['account'], message);
       // console.log(
         // ('Run: ./sign.js --othersig' + '\'' + JSON.stringify(signature) + '\'' + '--MSContract ' + args['MSContract']).green
-      console.log(`Run ./sign.js --othersig ${'\''}${JSON.stringify(signature)}${'\''} --MSContract ${args['MSContract']} --mode ensemble --type ${args['type']} --hash ${args['hash']} --level ${args['level']} --ipfs ${args['ipfs']} --account <YOURACCOUNT>`.green)
+      console.log(`Run ./sign.js --othersig ${'\''}${JSON.stringify(signature)}${'\''} --MSContract ${args['MSContract']} --mode ensemble --type ${args['type']} --hash ${codehash} --level ${args['level']} --ipfs ${args['ipfs']} --account <YOURACCOUNT>`.green)
     }
     else if (args['mode'] === 'ensemble') {
       // Parse other sig
@@ -61,11 +69,11 @@ async function main() {
 
       if (args['type'] === 'new') {
         contract.addAudit(
-            args['hash'], args['level'], ipfsHex, otherSig.v, otherSig.r, otherSig.s,
+            codehash, args['level'], ipfsHex, otherSig.v, otherSig.r, otherSig.s,
             {from: args['account']});
       } else if (args['type'] === 'evidence') {
         contract.addEvidence(
-            args['hash'], args['level'], ipfsHex, otherSig.v, otherSig.r, otherSig.s,
+            codehash, args['level'], ipfsHex, otherSig.v, otherSig.r, otherSig.s,
             {from: args['account']});
       }
       console.log('Trying to sign and send tx...');

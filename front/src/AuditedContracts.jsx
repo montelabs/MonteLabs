@@ -44,28 +44,27 @@ class AuditedContracts extends Component {
   }
 
   async initialize(contract, ipfs, networkId) {
+    window.ipfs = ipfs;
     if (contract == null || ipfs === null)
       return;
     const auditedContracts = await getAuditedContracts(contract, constants.contracts[networkId].MontelabsMS);
     this.setState({ reports: auditedContracts });
-    const reportPromises = auditedContracts.map(async auditedContract => {
+    const reportPromises = auditedContracts.map(async (auditedContract, idx) => {
       const ipfsAddr = getIPFSAddress(auditedContract.ipfsHash);
-
       const ipfsObj = await ipfs.dag.get(ipfsAddr);
       const timestamp = await getBlockTimestamp(this.props.web3js, auditedContract.insertedBlock);
-      return { ...ipfsObj, ...auditedContract, timestamp: timestamp }
-    });
-    const reportsList = (await Promise.all(reportPromises)).map(report => {
-      return ({
-        codeHash: report.codeHash,
-        insertedBlock: report.insertedBlock,
-        level: report.level,
-        timestamp: report.timestamp,
-        ...report.value
+      this.setState(prevState => {
+        let report = { ...ipfsObj, ...auditedContract, timestamp: timestamp };
+        prevState.reports[idx] = {
+          codeHash: report.codeHash,
+          insertedBlock: report.insertedBlock,
+          level: report.level,
+          timestamp: report.timestamp,
+          ...report.value
+        }
+        return {prevState};
       });
     });
-    this.setState({ reports: reportsList, allEvidences: [] });
-
     // Treat evidences
     auditedContracts.map(auditedContract => {
       contract.getPastEvents('AttachedEvidence', {

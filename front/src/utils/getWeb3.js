@@ -24,7 +24,7 @@ const connectToBrowser = async () => {
 }
 
 const connectToInfura = async () => {
-  const pr = new Web3.providers.HttpProvider('https://kovan.infura.io/DM5TjoIO6E0LEkDkYDtd');
+  const pr = new Web3.providers.HttpProvider('https://mainnet.infura.io/DM5TjoIO6E0LEkDkYDtd');
   const provider = 'infura';
   const web3js = new Web3(pr);
   return {web3js, provider};

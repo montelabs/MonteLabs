@@ -51,8 +51,6 @@ async function main() {
       args['mode'] === 'sign' ? true : false, codehash, args['level'],
       ipfsHex);
     
-    console.log(codehash);
-
     if (args['mode'] === 'sign') {
       const signature = await Sig(args['account'], message);
       // console.log(

@@ -45,7 +45,7 @@ async function main() {
 
     var codehash = args['hash'];
     if (args['code'] != null)
-      codehash = sha3(args['code']);
+      codehash = soliditySha3(args['code']);
 
     const message = soliditySha3(
       args['mode'] === 'sign' ? true : false, codehash, args['level'],

@@ -74,12 +74,6 @@ const AuditedContractPending = withStyles(styles)((props) => {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant='headline' component='h2'>
-          {codeHash.substr(0, 10)}...
-        </Typography>
-        <Typography component='p'>
-          [DEBUG] Inserted at block: {insertedBlock}
-        </Typography>
         <Typography component='div' align='center'>
           <CircularProgress className={classes.progress} size={75} />
         </Typography>

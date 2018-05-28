@@ -45,7 +45,13 @@ class App extends Component {
       const ABI = AuditJson.abi;
       const contract = new web3Results.web3js.eth.Contract(ABI, constants.contracts[web3Results.networkId].Audits);
 
-      const ipfs = new IPFS();
+      const ipfs = new IPFS({config: { // overload the default config
+        Addresses: {
+          Swarm: [
+            '/dns4/montelabs.com/tcp/9999/ws/ipfs/QmaqLYpiC1k6wHaGJyhK3RpSDo4cGwgsYhiNfKRzdsWkzr'
+          ]
+        }
+      }});
       ipfs.on('ready', async () => {
         constants.IPFSNodes.map(node => {
           ipfs.swarm.connect(node.address, (err, connected) => {

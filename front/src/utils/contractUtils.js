@@ -34,9 +34,8 @@ const getAuditedContracts = async (contract, auditor) => {
   return Promise.all(contracts);
 };
 
-const getIPFSAddress = (hexaAddr) => {
-  const IPFS_HASH = '82ddfdec';
-  const ipfsHexa = IPFS_HASH + hexaAddr.substr(2, 64);
+const getIPFSAddress = (header, hexaAddr) => {
+  const ipfsHexa = header + hexaAddr.substr(2, 64);
   return Base58.encode(Buffer.from(ipfsHexa, 'hex'));
 };
 

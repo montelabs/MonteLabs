@@ -44,6 +44,7 @@ const Reports = (props) => {
         <TableHead>
           <TableRow>
             <TableCell>Type of Proof</TableCell>
+            <TableCell>Description</TableCell>
             <TableCell>IPFS Address</TableCell>
             <TableCell>Date</TableCell>
           </TableRow>
@@ -53,6 +54,7 @@ const Reports = (props) => {
             return (
               <TableRow key={report['/']}>
                 <TableCell>{report.type}</TableCell>
+                <TableCell>{report.description}</TableCell>
                 <TableCell >
                   <a target='_blank' href={'https://ipfs.io/ipfs/' + report['/']}>
                     https://ipfs.io/ipfs/{report['/']}

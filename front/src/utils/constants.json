@@ -12,19 +12,19 @@
   "IPFSNodes": [
     {
       "name": "MonteLabs",
-      "address": "/dns4/montelabs.com/tcp/9999/ws/ipfs/QmaqLYpiC1k6wHaGJyhK3RpSDo4cGwgsYhiNfKRzdsWkzr"
+      "address": "/dns4/montelabs.com/tcp/8443/wss/ipfs/QmaqLYpiC1k6wHaGJyhK3RpSDo4cGwgsYhiNfKRzdsWkzr"
     },
     {
       "name": "Leonardo",
-      "address": "/dns4/leonardoalt.ddns.net/tcp/8888/ws/ipfs/QmezWnbMVYSnkgVnKhyq9YaToxyiUdpKCS3pQtBVc3Hiwc"
+      "address": "/dns4/leonardoalt.ddns.net/tcp/8888/wss/ipfs/QmezWnbMVYSnkgVnKhyq9YaToxyiUdpKCS3pQtBVc3Hiwc"
     },
     {
       "name": "Fynn",
-      "address": "/dns4/ipfs.enriquefynn.com/tcp/9999/ws/ipfs/QmSDwdbG1H7iWqDnhBh5sCjaYP5MS5kSCQVLRZuK9g6Qs9"
+      "address": "/dns4/ipfs.enriquefynn.com/tcp/9999/wss/ipfs/QmSDwdbG1H7iWqDnhBh5sCjaYP5MS5kSCQVLRZuK9g6Qs9"
     },
     {
       "name": "Rodrigo",
-      "address": "/dns4/ipfs.healmage.com/tcp/9999/ws/ipfs/QmVmm5yYYyXv2Gmo4DKe4zKdqTutfLgqy4Qtg9zd8sFeuw"
+      "address": "/dns4/ipfs.healmage.com/tcp/9999/wss/ipfs/QmVmm5yYYyXv2Gmo4DKe4zKdqTutfLgqy4Qtg9zd8sFeuw"
     }
   ]
 }

@@ -19,6 +19,10 @@ const styles = theme => ({
   },
 });
 
+//TODO: FIX THAT in next version
+const IPFS_HASH_C = '82ddfdec';
+const IPFS_HASH_D = '82ddfded';
+
 class AuditedContracts extends Component {
   constructor(props) {
     super(props);
@@ -50,8 +54,15 @@ class AuditedContracts extends Component {
     const auditedContracts = await getAuditedContracts(contract, constants.contracts[networkId].MontelabsMS);
     this.setState({ reports: auditedContracts });
     const reportPromises = auditedContracts.map(async (auditedContract, idx) => {
-      const ipfsAddr = getIPFSAddress(auditedContract.ipfsHash);
-      const ipfsObj = await ipfs.dag.get(ipfsAddr);
+      let ipfsAddr = getIPFSAddress(IPFS_HASH_C, auditedContract.ipfsHash);
+      let ipfsObj;
+      try {
+        ipfsObj = await ipfs.dag.get(ipfsAddr);
+      }
+      catch(err) {
+        ipfsAddr = getIPFSAddress(IPFS_HASH_D, auditedContract.ipfsHash);
+        ipfsObj = await ipfs.dag.get(ipfsAddr);
+      }
       const timestamp = await getBlockTimestamp(this.props.web3js, auditedContract.insertedBlock);
       this.setState(prevState => {
         let report = { ...ipfsObj, ...auditedContract, timestamp: timestamp };
@@ -74,8 +85,14 @@ class AuditedContracts extends Component {
         }, fromBlock: auditedContract.insertedBlock, toBlock: 'latest'
       }, (err, events) => {
         events.map(async event => {
-          const ipfsAddr = getIPFSAddress(event.returnValues.ipfsHash);
-          const ipfsObj = await ipfs.dag.get(ipfsAddr);
+          let ipfsAddr = getIPFSAddress(IPFS_HASH_C, event.returnValues.ipfsHash);
+          try {
+            let ipfsObj = await ipfs.dag.get(ipfsAddr);
+          }
+          catch(err) {
+            ipfsAddr = getIPFSAddress(IPFS_HASH_D, event.returnValues.ipfsHash); 
+            ipfsObj = await ipfs.dag.get(ipfsAddr);
+          }
           const timestamp = await getBlockTimestamp(this.props.web3js, event.blockNumber);
           this.setState(prevState => prevState.allEvidences.push({
             evidence: ipfsObj.value,

@@ -20,12 +20,16 @@ contract Audit {
   
   // Returns code audit level, 0 if not present
   function isVerifiedAddress(address _auditorAddr, address _contractAddr) public view returns(uint) {
-    bytes32 codeHash = keccak256(codeAt(_contractAddr));
+    bytes32 codeHash = getCodeHash(address _contractAddr);
     return auditedContracts[_auditorAddr][codeHash].level;
   }
 
   function isVerifiedCode(address _auditorAddr, bytes32 _codeHash) public view returns(uint) {
     return auditedContracts[_auditorAddr][_codeHash].level;
+  }
+
+  function getCodeHash(address _contractAddr) public view returns(bytes32) {
+      return keccak256(codeAt(_contractAddr));
   }
   
   // Add audit information

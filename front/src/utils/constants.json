@@ -1,12 +1,12 @@
 {
   "contracts": {
     "42": {
-      "MontelabsMS": "0x04800EE175179814685B23B36D5C663EdE4B55b1",
-      "Audits": "0x92dD7bB8D09C616F97222E2C46590094F54d8A0B"
+      "MontelabsMS": "0x10E66eE343EDFBB6A44c4B840796fd8687F15B14",
+      "Audits": "0x4DCE06643aFB02ce005498e553f2Db486CC9663e"
     },
     "1": {
-      "MontelabsMS": "0x9Fe932C142260F215ACc81560A315Fb45863b17c",
-      "Audits": "0xb5124aB26c97Be4975b242bfC26de88E22e6d644"
+      "MontelabsMS": "0x0bdDc964f4E8983f6C5e53a3A41C0Ee78c0356ad",
+      "Audits": "0x713Df989ECD9C5Bb5942b23e7386d473B5620B66"
     }
   },
   "IPFSNodes": [

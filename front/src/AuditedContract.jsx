@@ -24,6 +24,7 @@ const styles = theme => ({
   },
   media: {
     height: 250,
+    backgroundSize: 'contain',
   },
 });
 

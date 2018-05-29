@@ -26,6 +26,9 @@ const styles = theme => ({
     height: 250,
     backgroundSize: 'contain',
   },
+  content: {
+    height: 80,
+  }
 });
 
 const AuditedContract = withStyles(styles)((props) => {
@@ -45,7 +48,7 @@ const AuditedContract = withStyles(styles)((props) => {
         className={classes.media}
         image={(logo !== undefined) ? ('https://ipfs.io/ipfs/' + logo) : '/images/placeholder.png'}
       />
-      <CardContent>
+      <CardContent className={classes.content}>
         <Typography variant="headline" component="h2">
           {name}
         </Typography>

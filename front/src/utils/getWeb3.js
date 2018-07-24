@@ -85,6 +85,8 @@ const getWeb3 = async (params = null) => {
     }
   }
 
+  console.log(results);
+  window.results = results;
   const networkId = await results.web3js.eth.net.getId();
   let networkName = null;
   if (networkId === 1)

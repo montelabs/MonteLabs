@@ -26,10 +26,15 @@ const config = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    }
+    },
+    hot: true,
+    watchContentBase: true
   },
   performance: {
     hints: process.env.NODE_ENV === 'production' ? "warning" : false
+  },
+  watchOptions: {
+    poll: 1000 // Check for changes every second
   },
   module: {
     rules: [

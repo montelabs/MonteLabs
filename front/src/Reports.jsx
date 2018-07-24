@@ -1,9 +1,8 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Button from 'material-ui/Button';
-import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
-import Toolbar from 'material-ui/Toolbar';
+import { withStyles } from '@material-ui/core/styles';
+import Table, { TableBody, TableCell, TableHead, TableRow } from '@material-ui/core/Table';
+import Button from '@material-ui/core/Button';
+import Toolbar from '@material-ui/core/Toolbar';
 
 import IPFS from 'ipfs';
 import dateFormat from 'dateformat';
@@ -31,7 +30,7 @@ const Reports = (props) => {
     <div>
       <Toolbar>
         <Button className={classes.button} onClick={onClose} size="small" color="primary">
-          <ChevronLeftIcon className={classes.leftIcon} />
+          {/* <ChevronLeftIcon className={classes.leftIcon} /> */}
           Back
           </Button>
         {/* TODO: map contract names

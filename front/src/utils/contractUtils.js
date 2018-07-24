@@ -4,6 +4,7 @@ const getAudit =
     async (contract, auditor, codeHash) => {
   let auditedContract =
       await contract.methods.auditedContracts(auditor, codeHash).call({});
+  console.log(auditedContract);
   return {codeHash: codeHash, pending: true, ...auditedContract};
 }
 

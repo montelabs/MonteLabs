@@ -22,8 +22,8 @@ contract MonteLabsMS {
     address sender = msg.sender;
     require(owners[sender]);
 
-    bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
-                           keccak256(audit, _codeHash, _level, _ipfsHash));
+    bytes32 prefixedHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32",
+                           audit, _codeHash, _level, _ipfsHash));
 
     address other = ecrecover(prefixedHash, _v, _r, _s);
     // At least 2 different owners

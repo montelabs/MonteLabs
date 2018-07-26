@@ -1,10 +1,14 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Table, { TableBody, TableCell, TableHead, TableRow } from '@material-ui/core/Table';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
 
-import IPFS from 'ipfs';
 import dateFormat from 'dateformat';
 
 const styles = theme => ({
@@ -30,7 +34,7 @@ const Reports = (props) => {
     <div>
       <Toolbar>
         <Button className={classes.button} onClick={onClose} size="small" color="primary">
-          {/* <ChevronLeftIcon className={classes.leftIcon} /> */}
+          <ChevronLeft className={classes.leftIcon} />
           Back
           </Button>
         {/* TODO: map contract names
@@ -44,7 +48,7 @@ const Reports = (props) => {
           <TableRow>
             <TableCell>Type of Proof</TableCell>
             <TableCell>Description</TableCell>
-            <TableCell>IPFS Address</TableCell>
+            <TableCell>Document</TableCell>
             <TableCell>Date</TableCell>
           </TableRow>
         </TableHead>

@@ -36,7 +36,7 @@ parser.addArgument('--ipfs', {help: 'IPFS document hash'});
 var args = parser.parseArgs();
 
 const bytes = bs58.decode(args['ipfs']);
-let ipfsHex = '0x' + bytes.toString('hex').substr(8, 64);
+let ipfsHex = '0x' + bytes.toString('hex').substr(4, 64);
 
 main();
 

@@ -49,7 +49,9 @@ const AuditedContract = withStyles(styles)((props) => {
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
-        image={(logo !== undefined) ? ('https://ipfs.io/ipfs/' + logo) : '/images/placeholder.png'}
+        image={(logo !== undefined) ? require('../ipfs/' + logo + '.jpg') : '/images/placeholder.png'}
+        // image={require('../ipfs/Qmca7SNmzZkFFm3SjHVXrwDu8ivMvcqeeVWMDEAAcC6q4a.jpg')}
+
       />
       <CardContent className={classes.content}>
         <Typography variant="headline" component="h2">
@@ -72,23 +74,6 @@ const AuditedContract = withStyles(styles)((props) => {
   );
 });
 
-const AuditedContractPending = withStyles(styles)((props) => {
-  const {
-    classes,
-    codeHash,
-    insertedBlock,
-  } = props;
-  return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography component='div' align='center'>
-          <CircularProgress className={classes.progress} size={75} />
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-});
-
 AuditedContract.propTypes = {
   auditContract: PropTypes.object,
   name: PropTypes.string.isRequired,
@@ -99,10 +84,4 @@ AuditedContract.propTypes = {
   insertedBlock: PropTypes.string.isRequired
 };
 
-AuditedContractPending.propTypes = {
-  auditContract: PropTypes.object,
-  codeHash: PropTypes.string.isRequired,
-  insertedBlock: PropTypes.string.isRequired
-};
-
-export { AuditedContract, AuditedContractPending };
+export { AuditedContract };

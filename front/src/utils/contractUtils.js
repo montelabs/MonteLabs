@@ -4,7 +4,7 @@ const getAudit =
     async (contract, auditor, codeHash) => {
   let auditedContract =
       await contract.methods.auditedContracts(auditor, codeHash).call({});
-  return {codeHash: codeHash, pending: true, ...auditedContract};
+  return {codeHash: codeHash, ...auditedContract};
 }
 
 const getAuditedCodeHashes = async (contract, auditor) => {
@@ -36,6 +36,7 @@ const getAuditedContracts = async (contract, auditor) => {
 
 const getIPFSAddress = (header, hexaAddr) => {
   const ipfsHexa = header + hexaAddr.substr(2, 64);
+  console.log(Base58.encode(Buffer.from(ipfsHexa, 'hex')));
   return Base58.encode(Buffer.from(ipfsHexa, 'hex'));
 };
 

@@ -1,46 +1,30 @@
-pragma solidity ^0.4.19;
-import "./Audit.sol";
-import "./utils.sol";
+pragma solidity ^0.4.24;
 
+
+// Based on https://medium.com/@ChrisLundkvist/exploring-simpler-ethereum-multisig-contracts-b71020c19037
 contract MonteLabsMS {
+  uint public nonce;
   // MonteLabs owners
-  mapping (address => bool) public owners;
-  uint8 constant quorum = 2;
-  Audit public auditContract;
-
-  constructor(address[] _owners, Audit _auditContract) public {
-    auditContract = _auditContract;
+  mapping (address => bool) isOwner;
+  
+  constructor(address[] _owners) public {
     require(_owners.length == 3);
     for (uint i = 0; i < _owners.length; ++i) {
-      owners[_owners[i]] = true;
+      isOwner[_owners[i]] = true;
     }
   }
 
-  function addAuditOrEvidence(bool audit, bytes32 _codeHash, uint _level,
-                              bytes32 _ipfsHash, uint8 _v, bytes32 _r, 
-                              bytes32 _s) internal {
-    address sender = msg.sender;
-    require(owners[sender]);
+  function execute(uint8 _sigV, bytes32 _sigR, bytes32 _sigS, address _destination, uint _value, bytes _data) public {
+    require(isOwner[msg.sender]);
+    bytes memory prefix = "\x19Ethereum Signed Message:\n32";
+    bytes32 prefixedHash = keccak256(abi.encodePacked(prefix, keccak256(abi.encodePacked(this, _destination, _value, _data, nonce))));
 
-    bytes32 prefixedHash = keccak256("\x19Ethereum Signed Message:\n32",
-                           keccak256(audit, _codeHash, _level, _ipfsHash));
-
-    address other = ecrecover(prefixedHash, _v, _r, _s);
-    // At least 2 different owners
-    assert(other != sender);
-    if (audit)
-      auditContract.addAudit(_codeHash, _level, _ipfsHash);
-    else
-      auditContract.addEvidence(_codeHash, _level, _ipfsHash);
+    address recovered = ecrecover(prefixedHash, _sigV, _sigR, _sigS);
+    ++nonce;
+    require(_destination.call.value(_value)(_data));
+    require(recovered != msg.sender);
+    require(isOwner[recovered]);
   }
 
-  function addAudit(bytes32 _codeHash, uint _level, bytes32 _ipfsHash,
-                    uint8 _v, bytes32 _r, bytes32 _s) public {
-    addAuditOrEvidence(true, _codeHash, _level, _ipfsHash, _v, _r, _s);
-  }
-
-  function addEvidence(bytes32 _codeHash, uint _version, bytes32 _ipfsHash,
-                    uint8 _v, bytes32 _r, bytes32 _s) public {
-    addAuditOrEvidence(false, _codeHash, _version, _ipfsHash, _v, _r, _s);
-  }
+  function() external payable {}
 }

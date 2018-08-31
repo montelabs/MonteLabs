@@ -18,12 +18,3 @@ library GetCode {
     }
   }
 }
-
-library DS {
-  struct Proof {
-    uint level;         // Audit level
-    uint insertedBlock; // Audit's block
-    bytes32 ipfsHash;   // IPFS dag-cbor proof
-    address auditedBy;  // Audited by address
-  }
-}

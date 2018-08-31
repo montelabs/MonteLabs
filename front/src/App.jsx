@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import getWeb3 from './utils/getWeb3';
 
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import TextField from 'material-ui/TextField';
-import MenuItem from 'material-ui/Menu/MenuItem';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import AuditedContracts from './AuditedContracts';
 import AuditJson from '../../build/contracts/Audit.json';
 
 import constants from './utils/constants.json';
-
-import IPFS from 'ipfs';
 
 const styles = theme => ({
   flex: {
@@ -30,7 +28,6 @@ class App extends Component {
       provider: 'unknown',
       errorMsg: null,
       auditContract: null,
-      ipfs: null,
     }
   }
 
@@ -41,24 +38,10 @@ class App extends Component {
       const ABI = AuditJson.abi;
       const contract = new web3Results.web3js.eth.Contract(ABI, constants.contracts[web3Results.networkId].Audits);
 
-      const ipfs = new IPFS();
-      ipfs.on('ready', async () => {
-        constants.IPFSNodes.map(node => {
-          ipfs.swarm.connect(node.address, (err, connected) => {
-            if (err) {
-              console.error(`[IPFS] Could not connect to ${node.name}`);
-            }
-            else {
-              console.log(`[IPFS] Connected to ${node.name}`);
-            }
-          });
-        });
-        this.setState({
-          auditContract: contract,
-          errorMsg: null,
-          ipfs,
-          ...web3Results
-        });
+      this.setState({
+        auditContract: contract,
+        errorMsg: null,
+        ...web3Results
       });
     }
     catch (error) {
@@ -107,8 +90,8 @@ class App extends Component {
       <div className={classes.wrapper}>
         <AppBar position='static' color='default'>
           <Toolbar>
-            <Typography variant='headline' color='inherit' className={classes.flex}>
-              Security Audits
+            <Typography variant='Title' color='inherit' className={classes.flex}>
+              Montelabs
             </Typography>
             <Typography variant='subheading' color='inherit' className={classes.flex}>
               <TextField
@@ -140,7 +123,6 @@ class App extends Component {
         <AuditedContracts
           web3js={this.state.web3js}
           auditContract={this.state.auditContract}
-          ipfs={this.state.ipfs}
           networkId={this.state.networkId} />
       </div>
     );

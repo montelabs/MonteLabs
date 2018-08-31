@@ -2,15 +2,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Card, { CardMedia, CardActions, CardContent } from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import { CircularProgress } from 'material-ui/Progress'
-
-import Base58 from 'bs58';
-
-import getAudit from './utils/contractUtils';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   root: {
@@ -42,11 +41,20 @@ const AuditedContract = withStyles(styles)((props) => {
     insertedBlock,
     proofs,
   } = props;
+  let logoImg;
+  try {
+    logoImg = require('../ipfs/' + logo + '.png');
+  }
+  catch (err) {
+    logoImg = '/images/placeholder.png'; 
+  }
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
-        image={(logo !== undefined) ? ('https://ipfs.io/ipfs/' + logo) : '/images/placeholder.png'}
+        image={logoImg}
+      // image={require('../ipfs/Qmca7SNmzZkFFm3SjHVXrwDu8ivMvcqeeVWMDEAAcC6q4a.jpg')}
+
       />
       <CardContent className={classes.content}>
         <Typography variant="headline" component="h2">
@@ -69,6 +77,17 @@ const AuditedContract = withStyles(styles)((props) => {
   );
 });
 
+AuditedContract.propTypes = {
+  auditContract: PropTypes.object,
+  name: PropTypes.string.isRequired,
+  shortDescription: PropTypes.string.isRequired,
+  logo: PropTypes.string,
+  toggleReports: PropTypes.func.isRequired,
+  codeHash: PropTypes.string.isRequired,
+  insertedBlock: PropTypes.string.isRequired
+};
+
+
 const AuditedContractPending = withStyles(styles)((props) => {
   const {
     classes,
@@ -86,20 +105,11 @@ const AuditedContractPending = withStyles(styles)((props) => {
   );
 });
 
-AuditedContract.propTypes = {
-  auditContract: PropTypes.object,
-  name: PropTypes.string.isRequired,
-  shortDescription: PropTypes.string.isRequired,
-  logo: PropTypes.string,
-  toggleReports: PropTypes.func.isRequired,
-  codeHash: PropTypes.string.isRequired,
-  insertedBlock: PropTypes.string.isRequired
-};
-
 AuditedContractPending.propTypes = {
   auditContract: PropTypes.object,
   codeHash: PropTypes.string.isRequired,
   insertedBlock: PropTypes.string.isRequired
 };
+
 
 export { AuditedContract, AuditedContractPending };

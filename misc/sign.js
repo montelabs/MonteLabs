@@ -32,16 +32,22 @@ parser.addArgument('--hash', {help: 'New Audit code hash'});
 parser.addArgument('--code', {help: 'New Audit code'});
 parser.addArgument('--level', {help: 'baz bar'});
 parser.addArgument('--ipfs', {help: 'IPFS document hash'});
+parser.addArgument('--ipfs-hash-only');
+
 
 var args = parser.parseArgs();
 
 const bytes = bs58.decode(args['ipfs']);
-let ipfsHex = '0x' + bytes.toString('hex').substr(8, 64);
+let ipfsHex = '0x' + bytes.toString('hex').substr(4, 64);
 
 main();
 
 async function main() {
   try {
+    if (args['ipfs-hash-only'] !== null) {
+      console.log(ipfsHex);
+      return;
+    }
 
     var codehash = args['hash'];
     if (args['code'] != null)

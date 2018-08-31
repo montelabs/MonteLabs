@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 import { AuditedContract, AuditedContractPending } from './AuditedContract';
 import Reports from './Reports';
@@ -11,7 +11,6 @@ import Reports from './Reports';
 import constants from './utils/constants.json';
 import { getAuditedContracts, getIPFSAddress, getBlockTimestamp } from './utils/contractUtils';
 
-import IPFS from 'ipfs'
 
 const styles = theme => ({
   root: {
@@ -20,8 +19,7 @@ const styles = theme => ({
 });
 
 //TODO: FIX THAT in next version
-const IPFS_HASH_C = '82ddfdec';
-const IPFS_HASH_D = '82ddfded';
+const IPFS_HASH = '1220';
 
 class AuditedContracts extends Component {
   constructor(props) {
@@ -47,21 +45,20 @@ class AuditedContracts extends Component {
     this.setState({ showReports: false });
   }
 
-  async initialize(contract, ipfs, networkId) {
-    window.ipfs = ipfs;
-    if (contract == null || ipfs === null)
+  async initialize(contract, networkId) {
+    if (contract == null)
       return;
     const auditedContracts = await getAuditedContracts(contract, constants.contracts[networkId].MontelabsMS);
     this.setState({ reports: auditedContracts });
     const reportPromises = auditedContracts.map(async (auditedContract, idx) => {
-      let ipfsAddr = getIPFSAddress(IPFS_HASH_C, auditedContract.ipfsHash);
+      let ipfsAddr = getIPFSAddress(IPFS_HASH, auditedContract.ipfsHash);
       let ipfsObj;
       try {
-        ipfsObj = await ipfs.dag.get(ipfsAddr);
+        ipfsObj = require(`../ipfs/${ipfsAddr}.json`);
       }
       catch(err) {
-        ipfsAddr = getIPFSAddress(IPFS_HASH_D, auditedContract.ipfsHash);
-        ipfsObj = await ipfs.dag.get(ipfsAddr);
+        console.error(`Could not find ${ipfsAddr}.json`);
+        ipfsObj = {name: null};
       }
       const timestamp = await getBlockTimestamp(this.props.web3js, auditedContract.insertedBlock);
       this.setState(prevState => {
@@ -71,7 +68,7 @@ class AuditedContracts extends Component {
           insertedBlock: report.insertedBlock,
           level: report.level,
           timestamp: report.timestamp,
-          ...report.value
+          ...report
         }
         return {prevState};
       });
@@ -85,14 +82,8 @@ class AuditedContracts extends Component {
         }, fromBlock: auditedContract.insertedBlock, toBlock: 'latest'
       }, (err, events) => {
         events.map(async event => {
-          let ipfsAddr = getIPFSAddress(IPFS_HASH_C, event.returnValues.ipfsHash);
-          try {
-            let ipfsObj = await ipfs.dag.get(ipfsAddr);
-          }
-          catch(err) {
-            ipfsAddr = getIPFSAddress(IPFS_HASH_D, event.returnValues.ipfsHash); 
-            ipfsObj = await ipfs.dag.get(ipfsAddr);
-          }
+          let ipfsAddr = getIPFSAddress(IPFS_HASH, event.returnValues.ipfsHash);
+          let ipfsObj = require(`../ipfs/${ipfsAddr}.json`);
           const timestamp = await getBlockTimestamp(this.props.web3js, event.blockNumber);
           this.setState(prevState => prevState.allEvidences.push({
             evidence: ipfsObj.value,
@@ -106,7 +97,7 @@ class AuditedContracts extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.initialize(newProps.auditContract, newProps.ipfs, newProps.networkId);
+    this.initialize(newProps.auditContract, newProps.networkId);
   }
 
   render() {
@@ -121,7 +112,7 @@ class AuditedContracts extends Component {
           ) : (
               <Grid container className={classes.demo} justify="flex-start" spacing={8}>
                 {this.state.reports.map(value => {
-                  if (value.pending) {
+                  if (!value.name) {
                     return (
                       <Grid key={value.codeHash} item>
                         <AuditedContractPending

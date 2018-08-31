@@ -9,11 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress'
-
-import Base58 from 'bs58';
-
-import getAudit from './utils/contractUtils';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   root: {
@@ -45,12 +41,19 @@ const AuditedContract = withStyles(styles)((props) => {
     insertedBlock,
     proofs,
   } = props;
+  let logoImg;
+  try {
+    logoImg = require('../ipfs/' + logo + '.png');
+  }
+  catch (err) {
+    logoImg = '/images/placeholder.png'; 
+  }
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
-        image={(logo !== undefined) ? require('../ipfs/' + logo + '.jpg') : '/images/placeholder.png'}
-        // image={require('../ipfs/Qmca7SNmzZkFFm3SjHVXrwDu8ivMvcqeeVWMDEAAcC6q4a.jpg')}
+        image={logoImg}
+      // image={require('../ipfs/Qmca7SNmzZkFFm3SjHVXrwDu8ivMvcqeeVWMDEAAcC6q4a.jpg')}
 
       />
       <CardContent className={classes.content}>
@@ -84,4 +87,29 @@ AuditedContract.propTypes = {
   insertedBlock: PropTypes.string.isRequired
 };
 
-export { AuditedContract };
+
+const AuditedContractPending = withStyles(styles)((props) => {
+  const {
+    classes,
+    codeHash,
+    insertedBlock,
+  } = props;
+  return (
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography component='div' align='center'>
+          <CircularProgress className={classes.progress} size={75} />
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+});
+
+AuditedContractPending.propTypes = {
+  auditContract: PropTypes.object,
+  codeHash: PropTypes.string.isRequired,
+  insertedBlock: PropTypes.string.isRequired
+};
+
+
+export { AuditedContract, AuditedContractPending };

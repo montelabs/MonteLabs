@@ -32,6 +32,8 @@ parser.addArgument('--hash', {help: 'New Audit code hash'});
 parser.addArgument('--code', {help: 'New Audit code'});
 parser.addArgument('--level', {help: 'baz bar'});
 parser.addArgument('--ipfs', {help: 'IPFS document hash'});
+parser.addArgument('--ipfs-hash-only');
+
 
 var args = parser.parseArgs();
 
@@ -42,6 +44,10 @@ main();
 
 async function main() {
   try {
+    if (args['ipfs-hash-only'] !== null) {
+      console.log(ipfsHex);
+      return;
+    }
 
     var codehash = args['hash'];
     if (args['code'] != null)

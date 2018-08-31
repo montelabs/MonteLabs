@@ -13,8 +13,6 @@ import AuditJson from '../../build/contracts/Audit.json';
 
 import constants from './utils/constants.json';
 
-// import IPFS from 'ipfs';
-
 const styles = theme => ({
   flex: {
     flex: 'auto',
@@ -92,8 +90,8 @@ class App extends Component {
       <div className={classes.wrapper}>
         <AppBar position='static' color='default'>
           <Toolbar>
-            <Typography variant='headline' color='inherit' className={classes.flex}>
-              Security Audits
+            <Typography variant='Title' color='inherit' className={classes.flex}>
+              Montelabs
             </Typography>
             <Typography variant='subheading' color='inherit' className={classes.flex}>
               <TextField

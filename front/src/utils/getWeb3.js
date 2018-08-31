@@ -9,7 +9,6 @@ const connectToLocal = async () => {
 }
 
 const connectToBrowser = async () => {
-  const pr = new Web3.providers.HttpProvider('http://localhost:8545');
   let provider;
   if (typeof web3 === 'undefined') {
     throw new Error('Failed to connect to browser provider');
@@ -33,10 +32,10 @@ const connectToInfura = async () => {
 const tryAllProviders = async () => {
   let results;
   // Try in order Local, browser, infura
-  try {
-    results = await connectToLocal();
-  }
-  catch(err) {
+  // try {
+  //   results = await connectToLocal();
+  // }
+  // catch(err) {
     console.log('[web3] Local node not found');
     try {
       results = await connectToBrowser();
@@ -45,7 +44,7 @@ const tryAllProviders = async () => {
       console.log('[web3] Browser node not found');
       results = await connectToInfura();
     }
-  }
+  // }
   return results;
 };
 
@@ -85,7 +84,6 @@ const getWeb3 = async (params = null) => {
     }
   }
 
-  console.log(results);
   window.results = results;
   const networkId = await results.web3js.eth.net.getId();
   let networkName = null;

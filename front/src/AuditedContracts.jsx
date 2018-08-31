@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import { AuditedContract } from './AuditedContract';
+import { AuditedContract, AuditedContractPending } from './AuditedContract';
 import Reports from './Reports';
 
 import constants from './utils/constants.json';
@@ -52,7 +52,14 @@ class AuditedContracts extends Component {
     this.setState({ reports: auditedContracts });
     const reportPromises = auditedContracts.map(async (auditedContract, idx) => {
       let ipfsAddr = getIPFSAddress(IPFS_HASH, auditedContract.ipfsHash);
-      let ipfsObj = require(`../ipfs/${ipfsAddr}.json`);
+      let ipfsObj;
+      try {
+        ipfsObj = require(`../ipfs/${ipfsAddr}.json`);
+      }
+      catch(err) {
+        console.error(`Could not find ${ipfsAddr}.json`);
+        ipfsObj = {name: null};
+      }
       const timestamp = await getBlockTimestamp(this.props.web3js, auditedContract.insertedBlock);
       this.setState(prevState => {
         let report = { ...ipfsObj, ...auditedContract, timestamp: timestamp };
@@ -105,6 +112,17 @@ class AuditedContracts extends Component {
           ) : (
               <Grid container className={classes.demo} justify="flex-start" spacing={8}>
                 {this.state.reports.map(value => {
+                  if (!value.name) {
+                    return (
+                      <Grid key={value.codeHash} item>
+                        <AuditedContractPending
+                          auditContract={auditContract}
+                          codeHash={value.codeHash}
+                          insertedBlock={value.insertedBlock}
+                        />
+                      </Grid>
+                    );
+                  }
                   return (
                     <Grid key={value.codeHash} item>
                       <AuditedContract

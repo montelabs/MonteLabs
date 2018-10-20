@@ -60,7 +60,7 @@ contract('MonteLabs', function(accounts) {
   it('Should send to l_acc 0.5 eth with l_acc and f_acc signatures', async () => {
     const nonce = await monteLabsMSinstance.nonce();
     assert(nonce.eq(new BigNumber(0)));
-    const message = soliditySha3(monteLabsMSinstance.address, l_acc, new BigNumber(5*1e17), {type: 'bytes', value: '0x00'}, nonce);
+    const message = soliditySha3(monteLabsMSinstance.address, l_acc, new BigNumber(5*1e17), '0x00', nonce);
 
     const signatureL = await Sig(l_acc, message);
 
@@ -74,7 +74,7 @@ contract('MonteLabs', function(accounts) {
   it('Should send to l_acc 0.5 eth with l_acc and f_acc signatures again', async () => {
     const nonce = await monteLabsMSinstance.nonce();
     assert(nonce.eq(new BigNumber(1)));
-    const message = soliditySha3(monteLabsMSinstance.address, l_acc, new BigNumber(5*1e17), {type: 'bytes', value: '0x00'}, nonce);
+    const message = soliditySha3(monteLabsMSinstance.address, l_acc, new BigNumber(5*1e17), '0x00', nonce);
 
     const signatureL = await Sig(l_acc, message);
 
@@ -89,7 +89,7 @@ contract('MonteLabs', function(accounts) {
     const invalidAccount = accounts[6];
     const nonce = await monteLabsMSinstance.nonce();
     assert(nonce.eq(new BigNumber(2)));
-    const message = soliditySha3(monteLabsMSinstance.address, invalidAccount, new BigNumber(5*1e17), {type: 'bytes', value: '0x00'}, nonce);
+    const message = soliditySha3(monteLabsMSinstance.address, invalidAccount, new BigNumber(5*1e17), '0x00', nonce);
     const signatureL = await Sig(invalidAccount, message);
 
     try {

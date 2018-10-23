@@ -9,7 +9,7 @@ import { AuditedContract, AuditedContractPending } from './AuditedContract';
 import Reports from './Reports';
 
 import constants from './utils/constants.json';
-import { getAuditedContracts, getIPFSAddress, getBlockTimestamp } from './utils/contractUtils';
+import { getAuditedContracts, getOfflineAuditedContracts, getIPFSAddress, getBlockTimestamp } from './utils/contractUtils';
 
 
 const styles = theme => ({
@@ -48,17 +48,21 @@ class AuditedContracts extends Component {
   async initialize(contract, networkId) {
     if (contract == null)
       return;
-    const auditedContracts = await getAuditedContracts(contract, constants.contracts[networkId].MontelabsMS);
+    const offlineAuditedContracts = getOfflineAuditedContracts();
+    let auditedContracts = await getAuditedContracts(contract, constants.contracts[networkId].MontelabsMS);
+    auditedContracts = auditedContracts.concat(offlineAuditedContracts)
     this.setState({ reports: auditedContracts });
-    const reportPromises = auditedContracts.map(async (auditedContract, idx) => {
-      let ipfsAddr = getIPFSAddress(IPFS_HASH, auditedContract.ipfsHash);
+    auditedContracts.map(async (auditedContract, idx) => {
+      let ipfsAddrAndMode = getIPFSAddress(IPFS_HASH, auditedContract.ipfsHash);
+      let ipfsAddr = ipfsAddrAndMode.ipfs;
+      let mode = ipfsAddrAndMode.mode;
       let ipfsObj;
       try {
         ipfsObj = require(`../ipfs/${ipfsAddr}.json`);
       }
-      catch(err) {
+      catch (err) {
         console.error(`Could not find ${ipfsAddr}.json`);
-        ipfsObj = {name: null};
+        ipfsObj = { name: null };
       }
       const timestamp = await getBlockTimestamp(this.props.web3js, auditedContract.insertedBlock);
       this.setState(prevState => {
@@ -68,9 +72,10 @@ class AuditedContracts extends Component {
           insertedBlock: report.insertedBlock,
           level: report.level,
           timestamp: report.timestamp,
+          mode,
           ...report
         }
-        return {prevState};
+        return { prevState };
       });
     });
     // Treat evidences
@@ -111,7 +116,7 @@ class AuditedContracts extends Component {
             <Reports ipfsProofs={ipfsProofs} evidences={evidences} onClose={this.onCloseReports} />
           ) : (
               <Grid container className={classes.demo} justify="flex-start" spacing={8}>
-                {this.state.reports.map(value => {
+                {reports.map(value => {
                   if (!value.name) {
                     return (
                       <Grid key={value.codeHash} item>
@@ -134,6 +139,7 @@ class AuditedContracts extends Component {
                         insertedBlock={value.insertedBlock}
                         proofs={value.proofs}
                         toggleReports={this.toggleReports}
+                        mode={value.mode}
                       />
                     </Grid>
                   )

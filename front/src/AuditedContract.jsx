@@ -48,13 +48,12 @@ const AuditedContract = withStyles(styles)((props) => {
   catch (err) {
     logoImg = '/images/placeholder.png'; 
   }
+  console.log(props);
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
         image={logoImg}
-      // image={require('../ipfs/Qmca7SNmzZkFFm3SjHVXrwDu8ivMvcqeeVWMDEAAcC6q4a.jpg')}
-
       />
       <CardContent className={classes.content}>
         <Typography variant="headline" component="h2">

@@ -24,6 +24,7 @@ const styles = theme => ({
 });
 
 const formatDate = (timestamp) => {
+  if (timestamp === 0) return null;
   const date = new Date(timestamp * 1000);
   return dateFormat(date, "dd/mm/yyyy, HH:MM:ss", true);
 }

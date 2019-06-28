@@ -48,7 +48,7 @@ const AuditedContract = withStyles(styles)((props) => {
   catch (err) {
     logoImg = '/images/placeholder.png'; 
   }
-  console.log(props);
+
   return (
     <Card className={classes.card}>
       <CardMedia
